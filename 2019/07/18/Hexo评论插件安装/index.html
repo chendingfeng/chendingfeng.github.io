@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Dif&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Hexo yilia主题安装评论插件 | Hexo
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    <script src="/js/qrious.js"></script>
+  
+  
+    <script src="/js/gitment.js"></script>
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Hexo</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Hexo yilia主题安装评论插件</h2>
+  <p class="post-date">2019-07-18</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="Hexo-yilia主题安装评论插件"><a href="#Hexo-yilia主题安装评论插件" class="headerlink" title="Hexo yilia主题安装评论插件"></a>Hexo yilia主题安装评论插件</h2><h4 id="前言：该插件支持QQ微信登录，支持表情，gif动图评论！很帅有木有！插件采用韩国服务器的来必力评论插件-https-livere-com"><a href="#前言：该插件支持QQ微信登录，支持表情，gif动图评论！很帅有木有！插件采用韩国服务器的来必力评论插件-https-livere-com" class="headerlink" title="前言：该插件支持QQ微信登录，支持表情，gif动图评论！很帅有木有！插件采用韩国服务器的来必力评论插件 https://livere.com/"></a><strong>前言：该插件支持QQ微信登录，支持表情，gif动图评论！很帅有木有！插件采用韩国服务器的来必力评论插件 <a href="https://livere.com/" target="_blank" rel="noopener">https://livere.com/</a></strong></h4><p><strong>本文参考帖子</strong> <a href="https://www.cnblogs.com/pengwenzheng/p/8407479.html" target="_blank" rel="noopener">https://www.cnblogs.com/pengwenzheng/p/8407479.html</a></p>
+<h3 id="1、注册账号登录（支持QQ邮箱注册）—安装—复制代码"><a href="#1、注册账号登录（支持QQ邮箱注册）—安装—复制代码" class="headerlink" title="1、注册账号登录（支持QQ邮箱注册）—安装—复制代码"></a>1、注册账号登录（支持QQ邮箱注册）—安装—复制代码</h3><p><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/laibili02.png" alt></p>
+<h3 id="2、本地配置"><a href="#2、本地配置" class="headerlink" title="2、本地配置"></a>2、本地配置</h3><p><strong>进入本地仓库的主题目录 Shift+右键 打开终端</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/pinglunchajian.png" alt><br><strong>在该目录下新建一个livere.ejs文件</strong><br><code>git add livere.ejs</code><br><strong>编辑livere.ejs文件</strong><br><code>vim livere.ejs</code><br><strong>将第1步复制的代码粘贴进来，保存退出</strong></p>
+<p><strong>回到上一级目录</strong><br><code>cd ..</code><br><strong>查看当前所在目录</strong><br><code>pwd</code><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/_partial.png" alt><br><strong>查看当前目录所有文件列表</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/article.png" alt><br><strong>编辑article.ejs文件</strong><br><code>vim article.ejs</code><br><strong>找到下图代码位置并插入代码块</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/article02.png" alt>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (theme.livere)&#123; %&gt;</span><br><span class="line">  &lt;%- partial(&apos;post/livere&apos;, &#123;</span><br><span class="line">        key: post.slug,</span><br><span class="line">        title: post.title,</span><br><span class="line">        url: config.url+url_for(post.path)</span><br><span class="line">    &#125;) %&gt;</span><br><span class="line">  &lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>保存退出</strong>  </p>
+<p>**最后就是把插件放到主页面，进行加载，操作如下：</p>
+<p>打开你主题的设置项：_config.yml（注意不是hexo的_config.yml，而是yilia的文件夹里的_config.yml）**<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/article03.png" alt></p>
+<p><strong>编辑_config.yml文件</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/article04.png" alt><br><font color="red">注意：livere后面要有空格</font></p>
+<h3 id="3、部署到github"><a href="#3、部署到github" class="headerlink" title="3、部署到github"></a>3、部署到github</h3><p><strong>将文件部署到github上</strong><br><code>hexo g -d</code>  </p>
+<h4 id="开始撸评论吧！！！！！"><a href="#开始撸评论吧！！！！！" class="headerlink" title="开始撸评论吧！！！！！"></a>开始撸评论吧！！！！！</h4></section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+    
+      <a class="nav-right" href="/2019/07/18/Hexo常用命令以及报错处理/">
+        
+          Hexo常用命令以及报错处理（持续更新）
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Hexo-yilia主题安装评论插件"><span class="toc-nav-text">Hexo yilia主题安装评论插件</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#前言：该插件支持QQ微信登录，支持表情，gif动图评论！很帅有木有！插件采用韩国服务器的来必力评论插件-https-livere-com"><span class="toc-nav-text">前言：该插件支持QQ微信登录，支持表情，gif动图评论！很帅有木有！插件采用韩国服务器的来必力评论插件 https://livere.com/</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1、注册账号登录（支持QQ邮箱注册）—安装—复制代码"><span class="toc-nav-text">1、注册账号登录（支持QQ邮箱注册）—安装—复制代码</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2、本地配置"><span class="toc-nav-text">2、本地配置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3、部署到github"><span class="toc-nav-text">3、部署到github</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#开始撸评论吧！！！！！"><span class="toc-nav-text">开始撸评论吧！！！！！</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2019/07/18/Hexo评论插件安装/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+  <script>
+    var gitmentConfig = "chendingfeng";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "Hexo yilia主题安装评论插件",
+        owner: "chendingfeng",
+        repo: "chendingfeng.github.io",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  </script>
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2019 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
