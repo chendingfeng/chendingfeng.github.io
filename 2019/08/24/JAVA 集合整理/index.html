@@ -10,7 +10,7 @@
   
   <title>
     
-      Hexo常用命令以及报错处理（持续更新） | Dif Blog
+      JAVA 集合整理 | Dif Blog
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -132,8 +132,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>Hexo常用命令以及报错处理（持续更新）</h2>
-  <p class="post-date">2019-07-18</p>
+  <h2>JAVA 集合整理</h2>
+  <p class="post-date">2019-08-24</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -141,76 +141,62 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h2 id="Hexo-常用命令"><a href="#Hexo-常用命令" class="headerlink" title="Hexo 常用命令"></a>Hexo 常用命令</h2><h3 id="1、hexo-init"><a href="#1、hexo-init" class="headerlink" title="1、hexo init"></a>1、hexo init</h3><p><code>hexo init</code> 命令用于初始化本地文件夹为网站的根目录</p>
-<blockquote>
-<p>$ hexo init [folder]  </p>
+    <section class="markdown-content"><h1 id="JAVA-集合整理"><a href="#JAVA-集合整理" class="headerlink" title="JAVA 集合整理"></a>JAVA 集合整理</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><blockquote>
+<p>java的集合类存放在Java.util包中，主要有三种：List(包含Queue)、Set、Map   </p>
 </blockquote>
-<h3 id="2、hexo-new"><a href="#2、hexo-new" class="headerlink" title="2、hexo new"></a>2、hexo new</h3><p><code>hexo new</code> 命令用于新建文章，一般简写为 <code>hexo n</code></p>
-<blockquote>
-<p>$ hexo new [layout] <title>  </title></p>
-</blockquote>
-<ul>
-<li><code>layout</code> 可选参数，用以指定文章类型，若无指定则默认由配置文件中的 default_layout 选项决定</li>
-<li><code>title</code> 必填参数，用以指定文章标题，如果参数值中含有空格，则需要使用双引号包围</li>
+<h3 id="接口继承关系与实现（见下图）"><a href="#接口继承关系与实现（见下图）" class="headerlink" title="接口继承关系与实现（见下图）"></a>接口继承关系与实现（见下图）</h3><ul>
+<li><strong>Iterator:</strong> 迭代器，迭代遍历集合中的元素</li>
+<li><strong>Collection:</strong> Collection是集合List、Set、Queue最基本的接口</li>
+<li><strong>Map:</strong> 做为映射表的基础接口<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/JAVA%20Collection.jpg" alt> </li>
 </ul>
-<h3 id="3、hexo-generate"><a href="#3、hexo-generate" class="headerlink" title="3、hexo generate"></a>3、hexo generate</h3><p><code>hexo generate</code> 命令用于生成静态文件，一般可以简写为 <code>hexo g</code></p>
-<blockquote>
-<p>hexo generate  </p>
+<h3 id="Iterator-迭代器"><a href="#Iterator-迭代器" class="headerlink" title="Iterator(迭代器)"></a>Iterator(迭代器)</h3><blockquote>
+<p>集合很像是生活中的容器，作为容器，JAVA当然不希望局限集合存放元素的类型，集合的容纳性才足够强。但是，这样带来的问题就是我们不能够像for循环遍历数组一样遍历集合，因为我们不知道集合里元素确切的类型。迭代器就是遍历集合的很好解决方案，Iterator是一个对象，它可以遍历并选择序列中的对象，开发者不需要了解该序列的底层结构。</p>
 </blockquote>
-<ul>
-<li><code>-d</code>选项，指定生成后部署，与<code>hexo d -g</code> </li>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p><strong>特点：</strong> <font color="red">有序可重复</font><br><strong>实现类：</strong> ArrayList、LinkedList、Vector  </p>
+<h4 id="ArrayList-数组实现"><a href="#ArrayList-数组实现" class="headerlink" title="- ArrayList(数组实现)"></a>- ArrayList(数组实现)</h4><p><strong>优点：</strong> 底层通过数组实现，查询快，效率高<br><strong>缺点：</strong> 线程不安全，增删慢<br><strong>源码分析</strong> <a href>JAVA集合之ArrayList源码分析</a></p>
+<h4 id="LinkedList-链表实现"><a href="#LinkedList-链表实现" class="headerlink" title="- LinkedList(链表实现)"></a>- LinkedList(链表实现)</h4><p><strong>优点：</strong> 底层通过链表实现，增删快，效率高<br><strong>缺点：</strong> 线程不安全，查询慢  </p>
+<h4 id="Vector-数组实现"><a href="#Vector-数组实现" class="headerlink" title="- Vector(数组实现)"></a>- Vector(数组实现)</h4><p><strong>优点：</strong> 底层通过数组实现，查询快，线程安全<br><strong>缺点：</strong> 增删慢，效率低  </p>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p><strong>特点：</strong> <font color="red">无序不可重复</font><br><strong>实现类：</strong>  HashSet、TreeSet  </p>
+<h4 id="HashSet-哈希表"><a href="#HashSet-哈希表" class="headerlink" title="- HashSet(哈希表)"></a>- HashSet(哈希表)</h4><ul>
+<li>以散列表形式存储，存入元素必须定义<strong>hashCode()</strong>   </li>
+<li>通过哈希值存取元素  </li>
+<li>判断是否为同一元素：先判断哈希值相同，再比较equals方法相同则为同一元素；若哈希值相同 equals为false，就会放在同一哈希值下面(形成哈希桶)</li>
 </ul>
-<h3 id="4、hexo-server"><a href="#4、hexo-server" class="headerlink" title="4、hexo server"></a>4、hexo server</h3><p><code>hexo server</code> 命令用于启动本地服务器，一般可以简写为 <code>hexo s</code></p>
-<blockquote>
-<p>$ hexo server  </p>
-</blockquote>
-<ul>
-<li><code>-p</code> 选项，指定服务器端口，默认为 4000</li>
-<li><code>-i</code> 选项，指定服务器 IP 地址，默认为 0.0.0.0</li>
-<li><code>-s</code> 选项，静态模式 ，仅提供 public 文件夹中的文件并禁用文件监视  </li>
+<h4 id="TreeSet-二叉树"><a href="#TreeSet-二叉树" class="headerlink" title="- TreeSet(二叉树)"></a>- TreeSet(二叉树)</h4><ul>
+<li>保持次序的Set，底层为树结构，使用它可以从Set中提取有序的序列，元素必须实现 <strong>Comparable</strong> 接口</li>
+<li>每增加一个元素都会进行排序，将元素插入二叉树指定位置  </li>
+<li>覆写 <strong>compare()</strong> 函数时，根据返回值来进行排序  </li>
+<li>比较此对象与指定对象的顺序，如果该对象小于、等于或大于指定对象，则分别返回负整数、零或正整数    </li>
 </ul>
-<p><strong>说明 ： 运行服务器前需要安装 hexo-server 插件</strong></p>
-<blockquote>
-<p>$ npm install hexo-server –save  </p>
-</blockquote>
-<h3 id="5、hexo-deploy"><a href="#5、hexo-deploy" class="headerlink" title="5、hexo deploy"></a>5、hexo deploy</h3><p><code>hexo deploy</code> 命令用于部署网站，一般可以简写为 <code>hexo d</code></p>
-<blockquote>
-<p>$ hexo deploy  </p>
-</blockquote>
-<ul>
-<li><code>-g</code> 选项，指定生成后部署，与 <code>hexo g -d</code> 等价  </li>
+<h4 id="LinkHashSet-HashSet-LinkedHashMap"><a href="#LinkHashSet-HashSet-LinkedHashMap" class="headerlink" title="- LinkHashSet(HashSet+LinkedHashMap)"></a>- LinkHashSet(HashSet+LinkedHashMap)</h4><p>LinkHashSet继承自HashSet，同时基于LinkedHashMap实现，它所有的方法与操作与HashSet相同，底层用LinkedHashMap存储数据。</p>
+<h3 id="Map-映射表"><a href="#Map-映射表" class="headerlink" title="Map(映射表)"></a>Map(映射表)</h3><ul>
+<li>Map以 <strong>Key-Value</strong> 形式存储数据 </li>
+<li>Value可以是某个对象甚至某个集合，可以很容易扩展到多维  </li>
+<li>实现类：HashMap、TreeMap、LinkedHashMap、WeakHashMap、ConcurrentHashMap、IdentityHashMap  </li>
 </ul>
-<p><strong>说明 ：部署前需要修改 _config.yml 配置文件，下面以 git 为例进行说明</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repo: &lt;repository url&gt;</span><br><span class="line">    branch: master</span><br><span class="line">    message: 自定义提交消息，默认为Site updated: &#123;&#123; now(&apos;YYYY-MM-DD HH:mm:ss&apos;) &#125;&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="6、hexo-clean"><a href="#6、hexo-clean" class="headerlink" title="6、hexo clean"></a>6、hexo clean</h3><p><code>hexo clean</code> 命令用于清理缓存文件，是一个比较常用的命令</p>
-<blockquote>
-<p>$ hexo clean  </p>
-</blockquote>
-<p><strong>网站显示异常时可尝试此操作</strong></p>
-<h3 id="7、Option"><a href="#7、Option" class="headerlink" title="7、Option"></a>7、Option</h3><p><strong>（1）hexo -safe</strong><br><code>hexo --safe</code> 表示安全模式，用于禁用加载插件和脚本</p>
-<blockquote>
-<p>$ hexo –safe  </p>
-</blockquote>
-<p><strong>安装新插件时遇到问题可尝试此操作</strong><br><strong>（2）hexo –debug</strong><br><code>hexo</code> –debug 表示调试模式，用于将消息详细记录到终端和 <code>debug.log</code> 文件</p>
-<blockquote>
-<p>$ hexo –debug  </p>
-</blockquote>
-<p><strong>（3）hexo –silent</strong><br><code>hexo --silent</code> 表示静默模式，用于静默输出到终端  </p>
-<blockquote>
-<p>$ hexo –silent  </p>
-</blockquote>
-<p><strong>【参考资料】</strong>  <a href="https://hexo.io/docs/commands" target="_blank" rel="noopener">https://hexo.io/docs/commands</a>  </p>
-<hr>
-<h2 id="报错处理"><a href="#报错处理" class="headerlink" title="报错处理"></a>报错处理</h2><h3 id="1、找不到git部署"><a href="#1、找不到git部署" class="headerlink" title="1、找不到git部署"></a>1、找不到git部署</h3><blockquote>
-<p>ERROR Deployer not found: git  </p>
-</blockquote>
-<p><strong>解决方法</strong><br><code>npm install hexo-deployer-git --save</code>  </p>
-<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>部署类型设置git<br>修改根目录下<font color="red">_config.yml</font>文件  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/***/***.github.io.git </span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="- HashMap"></a>- HashMap</h4><ul>
+<li>HashMap根据键的hashCode值存储数据，因此具有极快的访问速度</li>
+<li>最多允许一条记录的键为null，允许多条记录的值为null</li>
+<li>hashMap非线程安全，Collections的synchronizedMap方法可以使HashMap具备线程安全，或者直接使用ConcurrentHashMap</li>
+<li>HashMap结构在<strong>**</strong>中具体介绍  </li>
+</ul>
+<h4 id="HashTable-线程安全"><a href="#HashTable-线程安全" class="headerlink" title="- HashTable(线程安全)"></a>- HashTable(线程安全)</h4><p>HashTable已经不建议使用，基本功能与HashMap类似，并发性能不如ConcurrentHashMap。不考虑线程安全的情况使用HashMap，考虑线程安全的情况下则使用ConcurrentHashMap更好。  </p>
+<h4 id="TreeMap-可排序"><a href="#TreeMap-可排序" class="headerlink" title="- TreeMap(可排序)"></a>- TreeMap(可排序)</h4><ul>
+<li>TreeMap 实现 SortedMap接口，可以根据键排序(默认为升序排序)，也可以指定排序比较器</li>
+<li>使用迭代器遍历后为排序过的记录</li>
+<li>key必须实现Comparable接口或在构造TreeMap时传入自定义的Comparator，否则会在运行时抛出java.lang.ClassCastException类型的异常。</li>
+</ul>
 </section>
     <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#JAVA集合" >
+    <span class="tag-code">JAVA集合</span>
+  </a>
+
+      </div>
     
     <!-- Tags END -->
     <!-- NAV START -->
@@ -218,17 +204,17 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2019/07/18/Hexo评论插件安装/">
+      <a class="nav-left" href="/2019/08/22/2019-07-20-MongoDB install for windows/">
         <span class="nav-arrow">← </span>
         
-          Hexo yilia主题安装评论插件
+          MongoDB安装为Windows服务 错误1053：服务没有及时响应启动或控制请求
         
       </a>
     
     
-      <a class="nav-right" href="/2019/07/18/2019-07-18-IDEA connection mysql/">
+      <a class="nav-right" href="/2019/08/26/JAVA 集合之ArrayList源码分析/">
         
-          IDEA连接数据库时区问题
+          JAVA 集合之ArrayList源码分析
         
         <span class="nav-arrow"> →</span>
       </a>
@@ -277,7 +263,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Hexo-常用命令"><span class="toc-nav-text">Hexo 常用命令</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1、hexo-init"><span class="toc-nav-text">1、hexo init</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2、hexo-new"><span class="toc-nav-text">2、hexo new</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3、hexo-generate"><span class="toc-nav-text">3、hexo generate</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4、hexo-server"><span class="toc-nav-text">4、hexo server</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5、hexo-deploy"><span class="toc-nav-text">5、hexo deploy</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#6、hexo-clean"><span class="toc-nav-text">6、hexo clean</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#7、Option"><span class="toc-nav-text">7、Option</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#报错处理"><span class="toc-nav-text">报错处理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1、找不到git部署"><span class="toc-nav-text">1、找不到git部署</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#配置文件"><span class="toc-nav-text">配置文件</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#JAVA-集合整理"><span class="toc-nav-text">JAVA 集合整理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#概述："><span class="toc-nav-text">概述：</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#接口继承关系与实现（见下图）"><span class="toc-nav-text">接口继承关系与实现（见下图）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Iterator-迭代器"><span class="toc-nav-text">Iterator(迭代器)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#List"><span class="toc-nav-text">List</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#ArrayList-数组实现"><span class="toc-nav-text">- ArrayList(数组实现)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#LinkedList-链表实现"><span class="toc-nav-text">- LinkedList(链表实现)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#Vector-数组实现"><span class="toc-nav-text">- Vector(数组实现)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Set"><span class="toc-nav-text">Set</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#HashSet-哈希表"><span class="toc-nav-text">- HashSet(哈希表)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#TreeSet-二叉树"><span class="toc-nav-text">- TreeSet(二叉树)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#LinkHashSet-HashSet-LinkedHashMap"><span class="toc-nav-text">- LinkHashSet(HashSet+LinkedHashMap)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Map-映射表"><span class="toc-nav-text">Map(映射表)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#HashMap"><span class="toc-nav-text">- HashMap</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#HashTable-线程安全"><span class="toc-nav-text">- HashTable(线程安全)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#TreeMap-可排序"><span class="toc-nav-text">- TreeMap(可排序)</span></a></li></ol></li></ol></li></ol></li></ol>
     
   </div>
 </aside>
@@ -287,7 +273,7 @@
 
 <script>
   (function () {
-    var url = 'http://yoursite.com/2019/07/18/Hexo常用命令以及报错处理/';
+    var url = 'http://yoursite.com/2019/08/24/JAVA 集合整理/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
@@ -349,7 +335,7 @@
     var gitmentConfig = "chendingfeng";
     if (gitmentConfig !== 'undefined') {
       var gitment = new Gitment({
-        id: "Hexo常用命令以及报错处理（持续更新）",
+        id: "JAVA 集合整理",
         owner: "chendingfeng",
         repo: "chendingfeng.github.io",
         oauth: {
