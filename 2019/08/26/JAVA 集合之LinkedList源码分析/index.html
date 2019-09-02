@@ -154,292 +154,98 @@
 <li>实现Cloneable，实现Cloneable接口，就可以使用Object.clone()进行克隆了。</li>
 <li>实现Serializable，实现序列化接口，说明该类能够启用其序列化功能。序列化其实就是持久化，将class转变为字节流传输，然后保存，反序列化就是读取</li>
 </ul>
-<h3 id="3-2-类属性"><a href="#3-2-类属性" class="headerlink" title="3.2 类属性"></a>3.2 类属性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class LinkedList&lt;E&gt;</span><br><span class="line">    extends AbstractSequentialList&lt;E&gt;</span><br><span class="line">    implements List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, java.io.Serializable</span><br><span class="line">&#123;</span><br><span class="line">    //被transient修饰的变量不参与序列化过程</span><br><span class="line">    //节点的个数</span><br><span class="line">    transient int size = 0;</span><br><span class="line">    //表示链表第一个节点</span><br><span class="line">    transient Node&lt;E&gt; first;</span><br><span class="line">    //表示链表最后一个节点</span><br><span class="line">    transient Node&lt;E&gt; last;</span><br><span class="line">    private static final long serialVersionUID = 876323262645176354L;</span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">这里的Node节点是在内部定义的一个类型，下面看看这个内部类有哪些属性以及如何构造的：</span><br><span class="line"></span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28Node%29.png)  </span><br><span class="line">从源码中可以看到，每个节点中都会有三个属性：  </span><br><span class="line">- item 存储该节点的元素element  </span><br><span class="line">- next 存储该节点指向下个节点的指针next  </span><br><span class="line">- prev 存储该节点指向上个节点的指针prev  </span><br><span class="line"></span><br><span class="line">### 3.3 构造方法  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28Constructs%29.png)  </span><br><span class="line">两个构造方法，**LinkedList(Collection&lt;? extends E&gt;)** 允许传入一个集合，查看源码可以看到调用了内部**addAll** 方法，稍后与add方法一同介绍  </span><br><span class="line">### 3.4 增</span><br><span class="line">添加元素操作有以下6种不同实现，下面逐个分析：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28add%29.png)  </span><br><span class="line">#### 3.4.1 add(E)  </span><br><span class="line">add(E)方法默认往linkedList末尾添加新元素  </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-类属性"><a href="#3-2-类属性" class="headerlink" title="3.2 类属性"></a>3.2 类属性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class LinkedList&lt;E&gt;</span><br><span class="line">    extends AbstractSequentialList&lt;E&gt;</span><br><span class="line">    implements List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, java.io.Serializable</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">    transient int size = 0; //节点的个数(被transient修饰的变量不参与序列化过程)</span><br><span class="line">    </span><br><span class="line">    transient Node&lt;E&gt; first; //表示链表第一个节点</span><br><span class="line">    </span><br><span class="line">    transient Node&lt;E&gt; last; //表示链表最后一个节点</span><br><span class="line">    private static final long serialVersionUID = 876323262645176354L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<pre><code>public boolean add(E e) {
-    linkLast(e);
-    return true;
-}
+<p>这里的Node节点是在内部定义的一个类型，下面看看这个内部类有哪些属性以及如何构造的：</p>
+<p><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28Node%29.png" alt><br>从源码中可以看到，每个节点中都会有三个属性：  </p>
+<ul>
+<li>item 存储该节点的元素element  </li>
+<li>next 存储该节点指向下个节点的指针next  </li>
+<li>prev 存储该节点指向上个节点的指针prev  </li>
+</ul>
+<h3 id="3-3-构造方法"><a href="#3-3-构造方法" class="headerlink" title="3.3 构造方法"></a>3.3 构造方法</h3><p><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28Constructs%29.png" alt><br>两个构造方法，<strong>LinkedList(Collection&lt;? extends E&gt;)</strong> 允许传入一个集合，查看源码可以看到调用了内部<strong>addAll</strong> 方法，稍后与add方法一同介绍  </p>
+<h3 id="3-4-增"><a href="#3-4-增" class="headerlink" title="3.4 增"></a>3.4 增</h3><p>添加元素操作有以下6种不同实现，下面逐个分析：<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28add%29.png" alt>  </p>
+<h4 id="3-4-1-add-E"><a href="#3-4-1-add-E" class="headerlink" title="3.4.1 add(E)"></a>3.4.1 add(E)</h4><p>add(E)方法默认往linkedList末尾添加新元素<br>源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public boolean add(E e) &#123;</span><br><span class="line">    linkLast(e);</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Links e as last element.</span><br><span class="line"> */</span><br><span class="line">void linkLast(E e) &#123;</span><br><span class="line">    </span><br><span class="line">    final Node&lt;E&gt; l = last;  //链表中最后一个节点 last </span><br><span class="line">    </span><br><span class="line">    final Node&lt;E&gt; newNode = new Node&lt;&gt;(l, e, null); //new 一个新的节点 newNode，将 prev 指针指向 l ，e 作为新节点元素，next 指向 null</span><br><span class="line">    </span><br><span class="line">    last = newNode; //新添加的 newNode 变为该 LinkedList 的最后一个节点 last</span><br><span class="line">    if (l == null)</span><br><span class="line">        first = newNode; // 若 l 节点不存在，则将新节点 newNode 作为第一个节点 first</span><br><span class="line">    else</span><br><span class="line">        l.next = newNode; // l 节点存在，将 l 节点的 next 指针指向 新节点 newNode </span><br><span class="line">    size++; //最后长度加一</span><br><span class="line">    modCount++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-/**
- * Links e as last element.
- */
-void linkLast(E e) {
-    //链表中最后一个节点 last 
-    final Node&lt;E&gt; l = last;  
-    //new 一个新的节点 newNode，将 prev 指针指向 l ，e 作为新节点元素，next 指向 null
-    final Node&lt;E&gt; newNode = new Node&lt;&gt;(l, e, null);
-    //新添加的 newNode 变为该 LinkedList 的最后一个节点 last
-    last = newNode;
-    if (l == null)
-        first = newNode; // 若 l 节点不存在，则将新节点 newNode 作为第一个节点 first
-    else
-        l.next = newNode; // l 节点存在，将 l 节点的 next 指针指向 新节点 newNode 
-    size++; //最后长度加一
-    modCount++;
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">执行大致过程可以看下图：  </span><br><span class="line"></span><br><span class="line">**演示当前 last 不为 null 的情况在末尾添加元素：**</span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_add%E6%B5%81%E7%A8%8B.gif)  </span><br><span class="line"></span><br><span class="line">#### 3.4.2 add(int, E)  </span><br><span class="line">add(int, E) 方法在指定位置添加新的元素  </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
+<p>执行大致过程可以看下图：  </p>
+<p><strong>演示当前 last 不为 null 的情况在末尾添加元素：</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_add%E6%B5%81%E7%A8%8B.gif" alt>  </p>
+<h4 id="3-4-2-add-int-E"><a href="#3-4-2-add-int-E" class="headerlink" title="3.4.2 add(int, E)"></a>3.4.2 add(int, E)</h4><p>add(int, E) 方法在指定位置添加新的元素<br>源码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public void add(int index, E element) &#123;</span><br><span class="line">    checkPositionIndex(index); //对指定元素位置进行合理性检查</span><br><span class="line"></span><br><span class="line">    if (index == size)</span><br><span class="line">        linkLast(element); //index == size 时，调用 linkLast 方法将元素添加到 linkedList 末尾</span><br><span class="line">    else</span><br><span class="line">        linkBefore(element, node(index)); //调用 linkBefore 方法</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//元素位置越界检查异常处理</span><br><span class="line">private void checkPositionIndex(int index) &#123;</span><br><span class="line">    if (!isPositionIndex(index))</span><br><span class="line">        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));</span><br><span class="line">&#125;</span><br><span class="line">//判断元素位置是否合理</span><br><span class="line">private boolean isPositionIndex(int index) &#123;</span><br><span class="line">    return index &gt;= 0 &amp;&amp; index &lt;= size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<pre><code>public void add(int index, E element) {
-    checkPositionIndex(index); //对指定元素位置进行合理性检查
+<p>分析 <strong>linkBefore()</strong> 方法之前，先看看 <strong>node(index)</strong> 对节点位置做了怎样的处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 返回指定元素索引处的(非空)节点</span><br><span class="line"> * Returns the (non-null) Node at the specified element index.</span><br><span class="line"> */</span><br><span class="line">Node&lt;E&gt; node(int index) &#123;</span><br><span class="line"></span><br><span class="line">    if (index &lt; (size &gt;&gt; 1)) &#123;  //size &gt;&gt; 1 相当于 size/2</span><br><span class="line">        Node&lt;E&gt; x = first;      //从头部第一个节点开始 赋值给 x</span><br><span class="line">        for (int i = 0; i &lt; index; i++)</span><br><span class="line">            x = x.next;         // 每次都将下一个节点赋值给 x</span><br><span class="line">        return x;               // 最后返回的 x 为 index 位置的节点</span><br><span class="line">    &#125; else &#123;                    </span><br><span class="line">        Node&lt;E&gt; x = last;</span><br><span class="line">        for (int i = size - 1; i &gt; index; i--) //这里和上面一样，区别在于从尾部最后一个节点开始遍历</span><br><span class="line">            x = x.prev;</span><br><span class="line">        return x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    if (index == size)
-        linkLast(element); //index == size 时，调用 linkLast 方法将元素添加到 linkedList 末尾
-    else
-        linkBefore(element, node(index)); //调用 linkBefore 方法
-}
+<p>在linkedList中没有下标的概念，但是它又能够在指定的位置插入元素，看完上面的代码，很显然它是通过遍历找到指定位置的元素，这里作者巧妙的利用了二分法，让遍历的效率提高一倍</p>
+<p>再看看 <strong>linkBefore()</strong> 方法的实现：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Inserts element e before non-null Node succ.</span><br><span class="line"> */</span><br><span class="line">void linkBefore(E e, Node&lt;E&gt; succ) &#123;</span><br><span class="line">    final Node&lt;E&gt; pred = succ.prev;</span><br><span class="line">    final Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, succ);</span><br><span class="line">    succ.prev = newNode;</span><br><span class="line">    if (pred == null)</span><br><span class="line">        first = newNode;</span><br><span class="line">    else</span><br><span class="line">        pred.next = newNode;</span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-//元素位置越界检查异常处理
-private void checkPositionIndex(int index) {
-    if (!isPositionIndex(index))
-        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
-}
-//判断元素位置是否合理
-private boolean isPositionIndex(int index) {
-    return index &gt;= 0 &amp;&amp; index &lt;= size;
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分析 **linkBefore()** 方法之前，先看看 **node(index)** 对节点位置做了怎样的处理。</span><br></pre></td></tr></table></figure>
+<p>这个 linkBefore 方法实现原理与 linkLast 方法类似，将新节点 newNode 的 prev 指针指向指定位置的节点 succ 的前一个节点 pred ，而 succ 的 prev 指针变为指向新节点 newNode， 而新节点 newNode 的 next 指针则指向 succ ，pred 节点的 next 指针指向 newNode ； 这里文字有点绕， 简单点讲: 就是将新节点 newNode 插入 指定节点 succ 的位置，再将它们的指针重整。下面放上一张动图，可以很清晰的看到 linkBefore 方法的大致执行流程：<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_add%E6%B5%81%E7%A8%8B%EF%BC%88linkBefore%EF%BC%89.gif" alt>  </p>
+<h4 id="3-4-3-addAll-int-index-Collection-lt-extends-E-gt-c"><a href="#3-4-3-addAll-int-index-Collection-lt-extends-E-gt-c" class="headerlink" title="3.4.3 addAll(int index, Collection&lt;? extends E&gt; c)"></a>3.4.3 addAll(int index, Collection&lt;? extends E&gt; c)</h4><p><strong>addAll(Collection&lt;? extends E&gt; c)</strong> 方法内部调用的是<strong>addAll(int index, Collection&lt;? extends E&gt; c)</strong> 方法，这里只分析后一个  </p>
+<p><strong>addAll(int index, Collection&lt;? extends E&gt; c)</strong> 方法： 在指定位置插入一个集合，linkList有改动返回true，否则返回false，源码如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public boolean addAll(int index, Collection&lt;? extends E&gt; c) &#123;</span><br><span class="line">    checkPositionIndex(index); //指定位置合理性检查</span><br><span class="line"></span><br><span class="line">    Object[] a = c.toArray(); // 将指定集合转换成数组 a</span><br><span class="line">    int numNew = a.length;    // 保存数组的长度</span><br><span class="line">    if (numNew == 0)</span><br><span class="line">        return false;         // 数组没有元素返回false</span><br><span class="line"></span><br><span class="line">    Node&lt;E&gt; pred, succ;       // 定义 pred 和 succ 节点，将要在这两个节点中间插入新的节点  </span><br><span class="line">    if (index == size) &#123;</span><br><span class="line">        succ = null; // 当指定位置 index 等于链表长度时，该插入位置为链表末端，不存在 succ 节点</span><br><span class="line">        pred = last; // 则 pred 为最后一个节点 last  </span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        succ = node(index); // 将指定位置index的节点赋值给 succ </span><br><span class="line">        pred = succ.prev;   // succ 的 prev 指针指向 pred </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for (Object o : a) &#123; // for 循环遍历 a 数组</span><br><span class="line">        @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o;</span><br><span class="line">        Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, null); // 将新节点 e 的 prev 指针指向 pred 节点，next 指针先指向 null ，得到新节点 newNode </span><br><span class="line">        if (pred == null) // 不存在前一个节点 pred 时</span><br><span class="line">            first = newNode; // 则新节点 newNode 为链表头一个节点 first </span><br><span class="line">        else</span><br><span class="line">            pred.next = newNode; //存在前一个节点 pred 时，pred 的 next 指针指向新节点 newNode</span><br><span class="line">        pred = newNode; // 最后将新节点赋值为 pred 供下次循环使用，逐个将数组 a 中的元素插入到链表中</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (succ == null) &#123; // 遍历完后，如果不存在 succ 节点</span><br><span class="line">        last = pred;  // 则数组 a 中最后一个元素 pred 就是链表末端最后一个节点 last</span><br><span class="line">    &#125; else &#123; // 如果存在 succ 节点</span><br><span class="line">        pred.next = succ; // 则数组 a 中最后一个元素 pred 节点的 next 指针指向 succ 节点</span><br><span class="line">        succ.prev = pred; // succ 的 prev 指针指向 数组 a 中最后一个元素 pred 节点</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    size += numNew; // 更新链表长度</span><br><span class="line">    modCount++;</span><br><span class="line">    return true; // 链表改动，返回 true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<pre><code>/**
- * 返回指定元素索引处的(非空)节点
- * Returns the (non-null) Node at the specified element index.
- */
-Node&lt;E&gt; node(int index) {
+<p><strong>小结：</strong> addAll 方法实现步骤：   </p>
+<ol>
+<li>传入指定的集合转换为数组；  </li>
+<li>遍历该数组逐个插入到链表中 </li>
+</ol>
+<h4 id="3-4-4-addFirst-E-和-addLast-E"><a href="#3-4-4-addFirst-E-和-addLast-E" class="headerlink" title="3.4.4 addFirst(E) 和 addLast(E)"></a>3.4.4 addFirst(E) 和 addLast(E)</h4><ul>
+<li>addFirst(E) : 在链表头部插入一个指定元素  </li>
+<li>addLast(E) : 在链表尾部插入一个指定元素  </li>
+</ul>
+<p>addFirst(E) 和 addLast(E)这两个方法分别调用了 linkFirst(E) 和 linkLast(E) ，两个方法实现大同小异，看源码：  </p>
+<p><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28linkFirsd%20linkLast%29.png" alt>   </p>
+<p>只要读懂前面的分析过程，这里就很容易看懂了，当我们要往链表头部插入一个新的节点时，我们只要将新节点的 prev 指针指向 null ，next 指针指向原链表的第一个节点，如此，指定的新元素就成为链表的第一个节点 first ；在链表尾部插入新元素也是同理，只是指针的方向改为指向 last 节点就可以了  </p>
+<h3 id="3-5-删"><a href="#3-5-删" class="headerlink" title="3.5 删"></a>3.5 删</h3><p>LinkedList 删除操作有7个方法实现，逐个分析：<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28remove%29.png" alt>  </p>
+<h4 id="3-5-1-remove"><a href="#3-5-1-remove" class="headerlink" title="3.5.1 remove()"></a>3.5.1 remove()</h4><p>remove() 方法删除链表的第一个元素<br>源码分析： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Retrieves and removes the head (first element) of this list.</span><br><span class="line"> * 检索并删除列表的头部第一个元素</span><br><span class="line"> * @return the head of this list</span><br><span class="line"> * @throws NoSuchElementException if this list is empty</span><br><span class="line"> * @since 1.5</span><br><span class="line"> */</span><br><span class="line">public E remove() &#123;</span><br><span class="line">    return removeFirst();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Removes and returns the first element from this list.</span><br><span class="line"> * 从列表中移除并返回第一个元素</span><br><span class="line"> * @return the first element from this list</span><br><span class="line"> * @throws NoSuchElementException if this list is empty</span><br><span class="line"> */</span><br><span class="line">public E removeFirst() &#123;</span><br><span class="line">    final Node&lt;E&gt; f = first;</span><br><span class="line">    if (f == null)</span><br><span class="line">        throw new NoSuchElementException(); //first 节点为 null 时，说明该链表上没有元素，抛出异常</span><br><span class="line">    return unlinkFirst(f); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * first 节点不为空时，断开 first 节点指针</span><br><span class="line"> * Unlinks non-null first node f.</span><br><span class="line"> */</span><br><span class="line">private E unlinkFirst(Node&lt;E&gt; f) &#123;</span><br><span class="line">    // assert f == first &amp;&amp; f != null;</span><br><span class="line">    final E element = f.item; // 将指定删除节点的元素 item 赋值给新定义的 element ，在方法结束时返回 element  </span><br><span class="line">    final Node&lt;E&gt; next = f.next; // 将 f 节点的 next 指向的节点赋值给新定义的 next 节点</span><br><span class="line">    f.item = null; // first 节点的 item 设置为 null</span><br><span class="line">    f.next = null; // first 节点的 next 设置为 null</span><br><span class="line">    first = next;  // first 节点的下一个节点 next 作为第一个节点 first</span><br><span class="line">    if (next == null)</span><br><span class="line">        last = null; // next 节点为 null 时，说明链表只有一个节点 first ，不存在节点 last ，所以 last 要设置为 null </span><br><span class="line">    else</span><br><span class="line">        next.prev = null; // next 在这里作为删除 first 节点后的第一个节点，故 next 的 prev 指针应该指向 null </span><br><span class="line">    size--; // 链表长度减一</span><br><span class="line">    modCount++;</span><br><span class="line">    return element; // 最后返回指定删除的元素 element</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    if (index &lt; (size &gt;&gt; 1)) {  //size &gt;&gt; 1 相当于 size/2
-        Node&lt;E&gt; x = first;      //从头部第一个节点开始 赋值给 x
-        for (int i = 0; i &lt; index; i++)
-            x = x.next;         // 每次都将下一个节点赋值给 x
-        return x;               // 最后返回的 x 为 index 位置的节点
-    } else {                    
-        Node&lt;E&gt; x = last;
-        for (int i = size - 1; i &gt; index; i--) //这里和上面一样，区别在于从尾部最后一个节点开始遍历
-            x = x.prev;
-        return x;
-    }
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在linkedList中没有下标的概念，但是它又能够在指定的位置插入元素，看完上面的代码，很显然它是通过遍历找到指定位置的元素，这里作者巧妙的利用了二分法，让遍历的效率提高一倍</span><br><span class="line"></span><br><span class="line">再看看 **linkBefore()** 方法的实现：</span><br></pre></td></tr></table></figure>
+<p>remove() 方法实现大致分为三步：  </p>
+<ol>
+<li>将第一个节点保存起来，方法结束时返回  </li>
+<li>断开第一个节点的所有指针  </li>
+<li>将第一个节点的下一个节点 next 设置为第一个节点 first  </li>
+</ol>
+<h4 id="3-5-2-remove-int"><a href="#3-5-2-remove-int" class="headerlink" title="3.5.2 remove(int)"></a>3.5.2 remove(int)</h4><p>remove(int) 方法删除指定位置的一个元素<br>源码分析：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public E remove(int index) &#123;</span><br><span class="line">    checkElementIndex(index); //指定位置的合理性检查</span><br><span class="line">    return unlink(node(index)); // node(index) 上面分析过，返回 index 位置的的节点，接着调用 unlink 方法 </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 删除指定不为空的元素</span><br><span class="line"> * Unlinks non-null node x.</span><br><span class="line"> */</span><br><span class="line">E unlink(Node&lt;E&gt; x) &#123;</span><br><span class="line">    // assert x != null;</span><br><span class="line">    final E element = x.item; // 将指定位置节点 x 的属性 item 保存为 element ，方法结束时返回 element </span><br><span class="line">    final Node&lt;E&gt; next = x.next; // 将 x 节点的 next 指针指向新定义的 next 节点</span><br><span class="line">    final Node&lt;E&gt; prev = x.prev; // 将 x 节点的 prev 指针指向新定义的 prev 节点</span><br><span class="line"></span><br><span class="line">    if (prev == null) &#123;</span><br><span class="line">        first = next; // 当 prev 指针指向 null 时，说明指定删除的节点位置为链表首节点 first ,将 next 节点设置为 first 节点</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        prev.next = next; // 否则将 next 节点设置为新定义的 prev 节点的 next 节点</span><br><span class="line">        x.prev = null; // 断开指定删除节点的 prev 指针指向的节点</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (next == null) &#123;</span><br><span class="line">        last = prev; // 当 next 指针指向的节点为 null 时，prev 节点作为最后一个节点 last  </span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        next.prev = prev; // 否则将 prev 节点设置为新定义的 next 节点的 prev 节点</span><br><span class="line">        x.next = null; // 断开指定删除节点的 next 指针指向的节点</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    x.item = null; // 将指定删除的节点的 item 属性设置为 null，让 GC 清理</span><br><span class="line">    size--; // 链表长度减一</span><br><span class="line">    modCount++;</span><br><span class="line">    return element; // 最后返回 element 元素</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<pre><code>/**
- * Inserts element e before non-null Node succ.
- */
-void linkBefore(E e, Node&lt;E&gt; succ) {
-    final Node&lt;E&gt; pred = succ.prev;
-    final Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, succ);
-    succ.prev = newNode;
-    if (pred == null)
-        first = newNode;
-    else
-        pred.next = newNode;
-    size++;
-    modCount++;
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">这个 linkBefore 方法实现原理与 linkLast 方法类似，将新节点 newNode 的 prev 指针指向指定位置的节点 succ 的前一个节点 pred ，而 succ 的 prev 指针变为指向新节点 newNode， 而新节点 newNode 的 next 指针则指向 succ ，pred 节点的 next 指针指向 newNode ； 这里文字有点绕， 简单点讲: 就是将新节点 newNode 插入 指定节点 succ 的位置，再将它们的指针重整。下面放上一张动图，可以很清晰的看到 linkBefore 方法的大致执行流程：    </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_add%E6%B5%81%E7%A8%8B%EF%BC%88linkBefore%EF%BC%89.gif)  </span><br><span class="line"></span><br><span class="line">#### 3.4.3 addAll(int index, Collection&lt;? extends E&gt; c)  </span><br><span class="line">**addAll(Collection&lt;? extends E&gt; c)** 方法内部调用的是**addAll(int index, Collection&lt;? extends E&gt; c)** 方法，这里只分析后一个  </span><br><span class="line"></span><br><span class="line">**addAll(int index, Collection&lt;? extends E&gt; c)** 方法： 在指定位置插入一个集合，linkList有改动返回true，否则返回false，源码如下：</span><br></pre></td></tr></table></figure>
+<p>remove(int index) 方法大致分为以下五步：  </p>
+<ol>
+<li>node(index) 获取到指定位置的节点  </li>
+<li>调用 unlink 方法，将指定位置节点传入 </li>
+<li>将指定位置节点的 item 属性保存为 element ，方法调用完毕返回该元素</li>
+<li>断开指定位置节点的所有指针</li>
+<li>将指定位置节点的左右节点连接  </li>
+</ol>
+<p>图解示例步骤如下：<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_remove%E6%B5%81%E7%A8%8B%EF%BC%88unlink%EF%BC%89.gif" alt></p>
+<h4 id="3-5-3-remove-Object-o"><a href="#3-5-3-remove-Object-o" class="headerlink" title="3.5.3 remove(Object o)"></a>3.5.3 remove(Object o)</h4><p>LinkedList remove(o) 方法支持传入一个Object类型，如果链表中包含指定元素，则删除，返回 true；如果不包含则返回 false<br>源码分析：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public boolean remove(Object o) &#123;</span><br><span class="line">    if (o == null) &#123;</span><br><span class="line">        for (Node&lt;E&gt; x = first; x != null; x = x.next) &#123; // 传入的参数为 null 时，从 first 节点开始 for 循环遍历整个链表</span><br><span class="line">            if (x.item == null) &#123; // 当节点的 item 属性为 null 时</span><br><span class="line">                unlink(x); // 删除该节点（unlink方法上面分析过）</span><br><span class="line">                return true; // 返回 true</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123; // 要删除的元素不为 null 的情况</span><br><span class="line">        for (Node&lt;E&gt; x = first; x != null; x = x.next) &#123;</span><br><span class="line">            if (o.equals(x.item)) &#123; // equals 方法判断元素是否同一元素</span><br><span class="line">                unlink(x); // 同一个元素，则删除该元素</span><br><span class="line">                return true; // 返回 true</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false; // 如果指定删除的元素在链表中不存在时，返回false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<pre><code>public boolean addAll(int index, Collection&lt;? extends E&gt; c) {
-    checkPositionIndex(index); //指定位置合理性检查
+<p>这里需要注意的是，在LinkedList 中可以存在 null 值的，而这个 null 值是存储在节点的 item 属性中，节点还有 prev 和 next 指针分别指向前一个元素和后一个元素，prev 和 next 不是空的，所以这也是LinkedList 中可存放 null 值的合理性因素。  </p>
+<h4 id="3-5-4-removeFirst-和-removeLast"><a href="#3-5-4-removeFirst-和-removeLast" class="headerlink" title="3.5.4 removeFirst() 和 removeLast()"></a>3.5.4 removeFirst() 和 removeLast()</h4><p>这两个方法顾名思义，与 addFirst() 和 addLast() 相对应，既然支持链表首尾添加，就应该支持首尾删除，看看它们的源码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public E removeFirst() &#123;</span><br><span class="line">    final Node&lt;E&gt; f = first;</span><br><span class="line">    if (f == null)</span><br><span class="line">        throw new NoSuchElementException();</span><br><span class="line">    return unlinkFirst(f);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public E removeLast() &#123;</span><br><span class="line">    final Node&lt;E&gt; l = last;</span><br><span class="line">    if (l == null)</span><br><span class="line">        throw new NoSuchElementException();</span><br><span class="line">    return unlinkLast(l);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    Object[] a = c.toArray(); // 将指定集合转换成数组 a
-    int numNew = a.length;    // 保存数组的长度
-    if (numNew == 0)
-        return false;         // 数组没有元素返回false
+<p>这里两个方法分别调用 unlinkFirst() 和 unlinkLast() ， unlinkFirst 方法在上面讲 remove() 的时候分析过，unlinkeLast() 就大同小异了。这里不再对这两个方法做分析，可以参考本文 3.5.1   </p>
+<h4 id="3-5-5-removeFirstOccurrence-Object-o-和-removeLastOccurrence-Object-o"><a href="#3-5-5-removeFirstOccurrence-Object-o-和-removeLastOccurrence-Object-o" class="headerlink" title="3.5.5 removeFirstOccurrence(Object o) 和 removeLastOccurrence(Object o)"></a>3.5.5 removeFirstOccurrence(Object o) 和 removeLastOccurrence(Object o)</h4><p>先上源码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public boolean removeFirstOccurrence(Object o) &#123;</span><br><span class="line">    return remove(o);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean removeLastOccurrence(Object o) &#123;</span><br><span class="line">    if (o == null) &#123;</span><br><span class="line">        for (Node&lt;E&gt; x = last; x != null; x = x.prev) &#123;</span><br><span class="line">            if (x.item == null) &#123;</span><br><span class="line">                unlink(x);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        for (Node&lt;E&gt; x = last; x != null; x = x.prev) &#123;</span><br><span class="line">            if (o.equals(x.item)) &#123;</span><br><span class="line">                unlink(x);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    Node&lt;E&gt; pred, succ;       // 定义 pred 和 succ 节点，将要在这两个节点中间插入新的节点  
-    if (index == size) {
-        succ = null; // 当指定位置 index 等于链表长度时，该插入位置为链表末端，不存在 succ 节点
-        pred = last; // 则 pred 为最后一个节点 last  
-    } else {
-        succ = node(index); // 将指定位置index的节点赋值给 succ 
-        pred = succ.prev;   // succ 的 prev 指针指向 pred 
-    }
+<p>这两个方法与 remove(Object o) 方法相似，只不过remove(Object o) 默认从链表头部开始遍历删除第一次出现的指定元素，removeFirstOccurrence(Object o) 就是调用了remove(Object o) 方法；而removeLastOccurrence(Object o) 实现了从链表尾部开始遍历删除指定元素，看到源码，我们可以知道它的实现方式与 remove(Object o) 相似，不同的是遍历的方向相反而已。  </p>
+<h4 id="3-5-6-小结："><a href="#3-5-6-小结：" class="headerlink" title="3.5.6 小结："></a>3.5.6 小结：</h4><p>LinkedList 支持链表首末添加/删除元素操作<br>LinkedList 支持指定位置插入/删除元素<br>LinkedList 允许删除指定元素<br>LinkedList 支持存放 null 值  </p>
+<h3 id="3-6-改"><a href="#3-6-改" class="headerlink" title="3.6 改"></a>3.6 改</h3><h4 id="3-6-1-set-int-index-E-element"><a href="#3-6-1-set-int-index-E-element" class="headerlink" title="3.6.1 set(int index, E element)"></a>3.6.1 set(int index, E element)</h4><p>set(int index, E element) 将链表中指定位置 index 的元素替换成指定元素 element  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public E set(int index, E element) &#123;</span><br><span class="line">    checkElementIndex(index); // 指定位置的合理性检查  </span><br><span class="line">    Node&lt;E&gt; x = node(index); // 获取指定位置的节点对象</span><br><span class="line">    E oldVal = x.item; // 将指定位置的节点对象 x 的 item 属性赋值给 oldVal  </span><br><span class="line">    x.item = element;  // 将指定的元素 element 赋值给 x 节点的 item 属性。</span><br><span class="line">    return oldVal;     // 将 oldValue 返回</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    for (Object o : a) { // for 循环遍历 a 数组
-        @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o;
-        Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, null); // 将新节点 e 的 prev 指针指向 pred 节点，next 指针先指向 null ，得到新节点 newNode 
-        if (pred == null) // 不存在前一个节点 pred 时
-            first = newNode; // 则新节点 newNode 为链表头一个节点 first 
-        else
-            pred.next = newNode; //存在前一个节点 pred 时，pred 的 next 指针指向新节点 newNode
-        pred = newNode; // 最后将新节点赋值为 pred 供下次循环使用，逐个将数组 a 中的元素插入到链表中
-    }
+<p>LinkedList 的数据都是存储在每个节点的 item 属性当中，我们修改数据时，只要修改对应位置节点的 item 属性就行了。</p>
+<h3 id="3-7-查"><a href="#3-7-查" class="headerlink" title="3.7 查"></a>3.7 查</h3><p>查操作一共有三个方法：<br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28get%29.png" alt>  </p>
+<h4 id="3-7-1-get-int"><a href="#3-7-1-get-int" class="headerlink" title="3.7.1 get(int)"></a>3.7.1 get(int)</h4><p>get(int) 方法允许获取链表中指定位置的元素。<br>源码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Returns the element at the specified position in this list.</span><br><span class="line"> *</span><br><span class="line"> * @param index index of the element to return</span><br><span class="line"> * @return the element at the specified position in this list</span><br><span class="line"> * @throws IndexOutOfBoundsException &#123;@inheritDoc&#125;</span><br><span class="line"> */</span><br><span class="line">public E get(int index) &#123;</span><br><span class="line">    checkElementIndex(index); // 对指定位置 index 做合理性检查</span><br><span class="line">    return node(index).item;  // 获取到 index 位置对应节点对象的 item 属性值，然后返回</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    if (succ == null) { // 遍历完后，如果不存在 succ 节点
-        last = pred;  // 则数组 a 中最后一个元素 pred 就是链表末端最后一个节点 last
-    } else { // 如果存在 succ 节点
-        pred.next = succ; // 则数组 a 中最后一个元素 pred 节点的 next 指针指向 succ 节点
-        succ.prev = pred; // succ 的 prev 指针指向 数组 a 中最后一个元素 pred 节点
-    }
+<p>get(int) 方法的实现调用了 node(index) 方法，该方法在本文 3.4.2 中分析过。方法内部主要是根据指针 for 循环遍历找到对应位置的节点，显然这种查找方式效率很慢，任何事情都不能做的完美，在这种数据结构下，已经决定了它自身的查找效率是个短板。作者希望能够尽可能的提高它的查询效率，在遍历之前使用了二分法，查找效率提高了一倍。</p>
+<h4 id="3-7-2-getFirst-和-getLast"><a href="#3-7-2-getFirst-和-getLast" class="headerlink" title="3.7.2 getFirst() 和 getLast()"></a>3.7.2 getFirst() 和 getLast()</h4><p>顾名思义，获取链表第一个元素和获取链表最后一个元素。<br>源码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public E getFirst() &#123;</span><br><span class="line">    final Node&lt;E&gt; f = first;</span><br><span class="line">    if (f == null)</span><br><span class="line">        throw new NoSuchElementException();</span><br><span class="line">    return f.item;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public E getLast() &#123;</span><br><span class="line">    final Node&lt;E&gt; l = last;</span><br><span class="line">    if (l == null)</span><br><span class="line">        throw new NoSuchElementException();</span><br><span class="line">    return l.item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    size += numNew; // 更新链表长度
-    modCount++;
-    return true; // 链表改动，返回 true
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">**小结：** addAll 方法实现步骤：   </span><br><span class="line">1. 传入指定的集合转换为数组；  </span><br><span class="line">2. 遍历该数组逐个插入到链表中 </span><br><span class="line"></span><br><span class="line">#### 3.4.4 addFirst(E) 和 addLast(E)  </span><br><span class="line">- addFirst(E) : 在链表头部插入一个指定元素  </span><br><span class="line">- addLast(E) : 在链表尾部插入一个指定元素  </span><br><span class="line"></span><br><span class="line">addFirst(E) 和 addLast(E)这两个方法分别调用了 linkFirst(E) 和 linkLast(E) ，两个方法实现大同小异，看源码：  </span><br><span class="line"></span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28linkFirsd%20linkLast%29.png)   </span><br><span class="line"></span><br><span class="line">只要读懂前面的分析过程，这里就很容易看懂了，当我们要往链表头部插入一个新的节点时，我们只要将新节点的 prev 指针指向 null ，next 指针指向原链表的第一个节点，如此，指定的新元素就成为链表的第一个节点 first ；在链表尾部插入新元素也是同理，只是指针的方向改为指向 last 节点就可以了  </span><br><span class="line"></span><br><span class="line">### 3.5 删  </span><br><span class="line">LinkedList 删除操作有7个方法实现，逐个分析：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28remove%29.png)  </span><br><span class="line">#### 3.5.1 remove()  </span><br><span class="line">remove() 方法删除链表的第一个元素  </span><br><span class="line">源码分析：</span><br></pre></td></tr></table></figure>
-
-<pre><code>/**
- * Retrieves and removes the head (first element) of this list.
- * 检索并删除列表的头部第一个元素
- * @return the head of this list
- * @throws NoSuchElementException if this list is empty
- * @since 1.5
- */
-public E remove() {
-    return removeFirst();
-}
-
-/**
- * Removes and returns the first element from this list.
- * 从列表中移除并返回第一个元素
- * @return the first element from this list
- * @throws NoSuchElementException if this list is empty
- */
-public E removeFirst() {
-    final Node&lt;E&gt; f = first;
-    if (f == null)
-        throw new NoSuchElementException(); //first 节点为 null 时，说明该链表上没有元素，抛出异常
-    return unlinkFirst(f); 
-}
-
-/**
- * first 节点不为空时，断开 first 节点指针
- * Unlinks non-null first node f.
- */
-private E unlinkFirst(Node&lt;E&gt; f) {
-    // assert f == first &amp;&amp; f != null;
-    final E element = f.item; // 将指定删除节点的元素 item 赋值给新定义的 element ，在方法结束时返回 element  
-    final Node&lt;E&gt; next = f.next; // 将 f 节点的 next 指向的节点赋值给新定义的 next 节点
-    f.item = null; // first 节点的 item 设置为 null
-    f.next = null; // first 节点的 next 设置为 null
-    first = next;  // first 节点的下一个节点 next 作为第一个节点 first
-    if (next == null)
-        last = null; // next 节点为 null 时，说明链表只有一个节点 first ，不存在节点 last ，所以 last 要设置为 null 
-    else
-        next.prev = null; // next 在这里作为删除 first 节点后的第一个节点，故 next 的 prev 指针应该指向 null 
-    size--; // 链表长度减一
-    modCount++;
-    return element; // 最后返回指定删除的元素 element
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">remove() 方法实现大致分为三步：  </span><br><span class="line">1. 将第一个节点保存起来，方法结束时返回  </span><br><span class="line">2. 断开第一个节点的所有指针  </span><br><span class="line">3. 将第一个节点的下一个节点 next 设置为第一个节点 first  </span><br><span class="line"></span><br><span class="line">#### 3.5.2 remove(int)  </span><br><span class="line">remove(int) 方法删除指定位置的一个元素  </span><br><span class="line">源码分析：</span><br></pre></td></tr></table></figure>
-
-<pre><code>public E remove(int index) {
-    checkElementIndex(index); //指定位置的合理性检查
-    return unlink(node(index)); // node(index) 上面分析过，返回 index 位置的的节点，接着调用 unlink 方法 
-}
-
-/**
- * 删除指定不为空的元素
- * Unlinks non-null node x.
- */
-E unlink(Node&lt;E&gt; x) {
-    // assert x != null;
-    final E element = x.item; // 将指定位置节点 x 的属性 item 保存为 element ，方法结束时返回 element 
-    final Node&lt;E&gt; next = x.next; // 将 x 节点的 next 指针指向新定义的 next 节点
-    final Node&lt;E&gt; prev = x.prev; // 将 x 节点的 prev 指针指向新定义的 prev 节点
-
-    if (prev == null) {
-        first = next; // 当 prev 指针指向 null 时，说明指定删除的节点位置为链表首节点 first ,将 next 节点设置为 first 节点
-    } else {
-        prev.next = next; // 否则将 next 节点设置为新定义的 prev 节点的 next 节点
-        x.prev = null; // 断开指定删除节点的 prev 指针指向的节点
-    }
-
-    if (next == null) {
-        last = prev; // 当 next 指针指向的节点为 null 时，prev 节点作为最后一个节点 last  
-    } else {
-        next.prev = prev; // 否则将 prev 节点设置为新定义的 next 节点的 prev 节点
-        x.next = null; // 断开指定删除节点的 next 指针指向的节点
-    }
-
-    x.item = null; // 将指定删除的节点的 item 属性设置为 null，让 GC 清理
-    size--; // 链表长度减一
-    modCount++;
-    return element; // 最后返回 element 元素
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">remove(int index) 方法大致分为以下五步：  </span><br><span class="line">1. node(index) 获取到指定位置的节点  </span><br><span class="line">2. 调用 unlink 方法，将指定位置节点传入 </span><br><span class="line">3. 将指定位置节点的 item 属性保存为 element ，方法调用完毕返回该元素</span><br><span class="line">4. 断开指定位置节点的所有指针</span><br><span class="line">5. 将指定位置节点的左右节点连接  </span><br><span class="line"></span><br><span class="line">图解示例步骤如下：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_remove%E6%B5%81%E7%A8%8B%EF%BC%88unlink%EF%BC%89.gif)</span><br><span class="line"></span><br><span class="line">#### 3.5.3 remove(Object o)  </span><br><span class="line">LinkedList remove(o) 方法支持传入一个Object类型，如果链表中包含指定元素，则删除，返回 true；如果不包含则返回 false  </span><br><span class="line">源码分析：</span><br></pre></td></tr></table></figure>
-
-<pre><code>public boolean remove(Object o) {
-    if (o == null) {
-        for (Node&lt;E&gt; x = first; x != null; x = x.next) { // 传入的参数为 null 时，从 first 节点开始 for 循环遍历整个链表
-            if (x.item == null) { // 当节点的 item 属性为 null 时
-                unlink(x); // 删除该节点（unlink方法上面分析过）
-                return true; // 返回 true
-            }
-        }
-    } else { // 要删除的元素不为 null 的情况
-        for (Node&lt;E&gt; x = first; x != null; x = x.next) {
-            if (o.equals(x.item)) { // equals 方法判断元素是否同一元素
-                unlink(x); // 同一个元素，则删除该元素
-                return true; // 返回 true
-            }
-        }
-    }
-    return false; // 如果指定删除的元素在链表中不存在时，返回false
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这里需要注意的是，在LinkedList 中可以存在 null 值的，而这个 null 值是存储在节点的 item 属性中，节点还有 prev 和 next 指针分别指向前一个元素和后一个元素，prev 和 next 不是空的，所以这也是LinkedList 中可存放 null 值的合理性因素。  </span><br><span class="line"></span><br><span class="line">#### 3.5.4 removeFirst() 和 removeLast()  </span><br><span class="line">这两个方法顾名思义，与 addFirst() 和 addLast() 相对应，既然支持链表首尾添加，就应该支持首尾删除，看看它们的源码：</span><br></pre></td></tr></table></figure>
-
-<pre><code>public E removeFirst() {
-    final Node&lt;E&gt; f = first;
-    if (f == null)
-        throw new NoSuchElementException();
-    return unlinkFirst(f);
-}
-
-public E removeLast() {
-    final Node&lt;E&gt; l = last;
-    if (l == null)
-        throw new NoSuchElementException();
-    return unlinkLast(l);
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这里两个方法分别调用 unlinkFirst() 和 unlinkLast() ， unlinkFirst 方法在上面讲 remove() 的时候分析过，unlinkeLast() 就大同小异了。这里不再对这两个方法做分析，可以参考本文 3.5.1   </span><br><span class="line"></span><br><span class="line">#### 3.5.5 removeFirstOccurrence(Object o) 和 removeLastOccurrence(Object o)  </span><br><span class="line">先上源码：</span><br></pre></td></tr></table></figure>
-
-<pre><code>public boolean removeFirstOccurrence(Object o) {
-    return remove(o);
-}
-
-public boolean removeLastOccurrence(Object o) {
-    if (o == null) {
-        for (Node&lt;E&gt; x = last; x != null; x = x.prev) {
-            if (x.item == null) {
-                unlink(x);
-                return true;
-            }
-        }
-    } else {
-        for (Node&lt;E&gt; x = last; x != null; x = x.prev) {
-            if (o.equals(x.item)) {
-                unlink(x);
-                return true;
-            }
-        }
-    }
-    return false;
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">这两个方法与 remove(Object o) 方法相似，只不过remove(Object o) 默认从链表头部开始遍历删除第一次出现的指定元素，removeFirstOccurrence(Object o) 就是调用了remove(Object o) 方法；而removeLastOccurrence(Object o) 实现了从链表尾部开始遍历删除指定元素，看到源码，我们可以知道它的实现方式与 remove(Object o) 相似，不同的是遍历的方向相反而已。  </span><br><span class="line">#### 3.5.6 小结：  </span><br><span class="line">LinkedList 支持链表首末添加/删除元素操作  </span><br><span class="line">LinkedList 支持指定位置插入/删除元素  </span><br><span class="line">LinkedList 允许删除指定元素  </span><br><span class="line">LinkedList 支持存放 null 值  </span><br><span class="line"></span><br><span class="line">### 3.6 改  </span><br><span class="line">#### 3.6.1 set(int index, E element)   </span><br><span class="line">set(int index, E element) 将链表中指定位置 index 的元素替换成指定元素 element</span><br></pre></td></tr></table></figure>
-
-<pre><code>public E set(int index, E element) {
-    checkElementIndex(index); // 指定位置的合理性检查  
-    Node&lt;E&gt; x = node(index); // 获取指定位置的节点对象
-    E oldVal = x.item; // 将指定位置的节点对象 x 的 item 属性赋值给 oldVal  
-    x.item = element;  // 将指定的元素 element 赋值给 x 节点的 item 属性。
-    return oldVal;     // 将 oldValue 返回
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LinkedList 的数据都是存储在每个节点的 item 属性当中，我们修改数据时，只要修改对应位置节点的 item 属性就行了。</span><br><span class="line"></span><br><span class="line">### 3.7 查 </span><br><span class="line">查操作一共有三个方法：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28get%29.png)  </span><br><span class="line">#### 3.7.1 get(int)  </span><br><span class="line">get(int) 方法允许获取链表中指定位置的元素。   </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
-
-<pre><code>/**
- * Returns the element at the specified position in this list.
- *
- * @param index index of the element to return
- * @return the element at the specified position in this list
- * @throws IndexOutOfBoundsException {@inheritDoc}
- */
-public E get(int index) {
-    checkElementIndex(index); // 对指定位置 index 做合理性检查
-    return node(index).item;  // 获取到 index 位置对应节点对象的 item 属性值，然后返回
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">get(int) 方法的实现调用了 node(index) 方法，该方法在本文 3.4.2 中分析过。方法内部主要是根据指针 for 循环遍历找到对应位置的节点，显然这种查找方式效率很慢，任何事情都不能做的完美，在这种数据结构下，已经决定了它自身的查找效率是个短板。作者希望能够尽可能的提高它的查询效率，在遍历之前使用了二分法，查找效率提高了一倍。</span><br><span class="line"></span><br><span class="line">#### 3.7.2 getFirst() 和 getLast()</span><br><span class="line">顾名思义，获取链表第一个元素和获取链表最后一个元素。  </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
-
-<pre><code>public E getFirst() {
-    final Node&lt;E&gt; f = first;
-    if (f == null)
-        throw new NoSuchElementException();
-    return f.item;
-}
-
-public E getLast() {
-    final Node&lt;E&gt; l = last;
-    if (l == null)
-        throw new NoSuchElementException();
-    return l.item;
-}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这两个方法很容易看懂，就三步，赋值、对节点做异常处理、返回节点的 item 属性。  </span><br><span class="line"></span><br><span class="line">## 4. LinkedList 实现 Deque </span><br><span class="line">Deque 是双端队列，基本操作与 LinkedList 相似，看源码：</span><br></pre></td></tr></table></figure>
-
+<p>这两个方法很容易看懂，就三步，赋值、对节点做异常处理、返回节点的 item 属性。  </p>
+<h2 id="4-LinkedList-实现-Deque"><a href="#4-LinkedList-实现-Deque" class="headerlink" title="4. LinkedList 实现 Deque"></a>4. LinkedList 实现 Deque</h2><p>Deque 是双端队列，基本操作与 LinkedList 相似，看源码：  </p>
 <pre><code>public boolean offer(E e) {
     return add(e);
 }
@@ -488,18 +294,17 @@ public void push(E e) {
 
 public E pop() {
     return removeFirst();
-}</code></pre><pre><code>可以看到 Deque 的所有操作都基于 LinkedList 内部方法的实现  
-
-## 5. 总结  
-- LinkedList 在头部或尾部添加元素，复杂度为 O(1) 
-- LinkedList 随机添加元素，涉及到指针的指向操作（参考本文3.4.2 node(index) 方法分析），复杂度为 O(n)  
-- LinkedList 删除元素，在头部尾部删除元素，复杂度为 O(1)
-- LinkedList 指定位置删除元素，需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n)
-- LinkedList 改操作（set方法），需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n) 
-- LinkedList 查操作（get(int)方法），需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n)  
-- linkedList 所有操作都不是原子操作，线程不安全。
-
-</code></pre></section>
+}</code></pre><p>可以看到 Deque 的所有操作都基于 LinkedList 内部方法的实现  </p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><ul>
+<li>LinkedList 在头部或尾部添加元素，复杂度为 O(1) </li>
+<li>LinkedList 随机添加元素，涉及到指针的指向操作（参考本文3.4.2 node(index) 方法分析），复杂度为 O(n)  </li>
+<li>LinkedList 删除元素，在头部尾部删除元素，复杂度为 O(1)</li>
+<li>LinkedList 指定位置删除元素，需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n)</li>
+<li>LinkedList 改操作（set方法），需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n) </li>
+<li>LinkedList 查操作（get(int)方法），需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n)  </li>
+<li>linkedList 所有操作都不是原子操作，线程不安全。</li>
+</ul>
+</section>
     <!-- Tags START -->
     
       <div class="tags">
@@ -576,7 +381,7 @@ public E pop() {
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#JAVA-集合之LinkedList源码分析"><span class="toc-nav-text">JAVA 集合之LinkedList源码分析</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-概述"><span class="toc-nav-text">1. 概述</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-链表结构"><span class="toc-nav-text">2. 链表结构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-1-单向链表"><span class="toc-nav-text">2.1 单向链表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-2-单向循环链表"><span class="toc-nav-text">2.2 单向循环链表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-3-双向链表（jdk1-7-1-8中LinkedList底层实现结构）"><span class="toc-nav-text">2.3 双向链表（jdk1.7/1.8中LinkedList底层实现结构）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-4-双向循环链表（jdk1-6中LinkedList底层实现结构）"><span class="toc-nav-text">2.4 双向循环链表（jdk1.6中LinkedList底层实现结构）</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-LinkedList源码分析-双向链表"><span class="toc-nav-text">3. LinkedList源码分析(双向链表)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-1-继承结构"><span class="toc-nav-text">3.1 继承结构</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-2-类属性"><span class="toc-nav-text">3.2 类属性</span></a></li></ol></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#JAVA-集合之LinkedList源码分析"><span class="toc-nav-text">JAVA 集合之LinkedList源码分析</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-概述"><span class="toc-nav-text">1. 概述</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-链表结构"><span class="toc-nav-text">2. 链表结构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-1-单向链表"><span class="toc-nav-text">2.1 单向链表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-2-单向循环链表"><span class="toc-nav-text">2.2 单向循环链表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-3-双向链表（jdk1-7-1-8中LinkedList底层实现结构）"><span class="toc-nav-text">2.3 双向链表（jdk1.7/1.8中LinkedList底层实现结构）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-4-双向循环链表（jdk1-6中LinkedList底层实现结构）"><span class="toc-nav-text">2.4 双向循环链表（jdk1.6中LinkedList底层实现结构）</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-LinkedList源码分析-双向链表"><span class="toc-nav-text">3. LinkedList源码分析(双向链表)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-1-继承结构"><span class="toc-nav-text">3.1 继承结构</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-2-类属性"><span class="toc-nav-text">3.2 类属性</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-3-构造方法"><span class="toc-nav-text">3.3 构造方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-4-增"><span class="toc-nav-text">3.4 增</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-4-1-add-E"><span class="toc-nav-text">3.4.1 add(E)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-4-2-add-int-E"><span class="toc-nav-text">3.4.2 add(int, E)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-4-3-addAll-int-index-Collection-lt-extends-E-gt-c"><span class="toc-nav-text">3.4.3 addAll(int index, Collection&lt;? extends E&gt; c)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-4-4-addFirst-E-和-addLast-E"><span class="toc-nav-text">3.4.4 addFirst(E) 和 addLast(E)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-5-删"><span class="toc-nav-text">3.5 删</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-5-1-remove"><span class="toc-nav-text">3.5.1 remove()</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-5-2-remove-int"><span class="toc-nav-text">3.5.2 remove(int)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-5-3-remove-Object-o"><span class="toc-nav-text">3.5.3 remove(Object o)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-5-4-removeFirst-和-removeLast"><span class="toc-nav-text">3.5.4 removeFirst() 和 removeLast()</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-5-5-removeFirstOccurrence-Object-o-和-removeLastOccurrence-Object-o"><span class="toc-nav-text">3.5.5 removeFirstOccurrence(Object o) 和 removeLastOccurrence(Object o)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-5-6-小结："><span class="toc-nav-text">3.5.6 小结：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-6-改"><span class="toc-nav-text">3.6 改</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-6-1-set-int-index-E-element"><span class="toc-nav-text">3.6.1 set(int index, E element)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-7-查"><span class="toc-nav-text">3.7 查</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-7-1-get-int"><span class="toc-nav-text">3.7.1 get(int)</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#3-7-2-getFirst-和-getLast"><span class="toc-nav-text">3.7.2 getFirst() 和 getLast()</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-LinkedList-实现-Deque"><span class="toc-nav-text">4. LinkedList 实现 Deque</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5-总结"><span class="toc-nav-text">5. 总结</span></a></li></ol>
     
   </div>
 </aside>
