@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+  <head><meta name="generator" content="Hexo 3.9.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="Dif&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      JAVA 集合之LinkedList源码分析 | Dif Blog
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/css/plugins/gitment.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    <script src="/js/qrious.js"></script>
+  
+  
+    <script src="/js/gitment.js"></script>
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+</head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png">
+</div>
+
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>Dif Blog</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>JAVA 集合之LinkedList源码分析</h2>
+  <p class="post-date">2019-08-26</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h2 id="JAVA-集合之LinkedList源码分析"><a href="#JAVA-集合之LinkedList源码分析" class="headerlink" title="JAVA 集合之LinkedList源码分析"></a>JAVA 集合之LinkedList源码分析</h2><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>LinkedList最大的特点是它的数据结构，它的底层是使用链表结构实现。链表是线性表的一种。而链表又分为单向链表和双向链表，链表又有循环与非循环之分，在jdk1.6中就是使用了双向循环链表的结构，而在jdk1.7和jdk1.8中改成了双向链表，也就是取消循环了。本文主要分析jdk1.8中LinkedList的源码，当然，下面我也会放上几种链表的图解说明  </p>
+<h2 id="2-链表结构"><a href="#2-链表结构" class="headerlink" title="2. 链表结构"></a>2. 链表结构</h2><h4 id="2-1-单向链表"><a href="#2-1-单向链表" class="headerlink" title="2.1 单向链表"></a>2.1 单向链表</h4><p><strong>单向链表中每个节点都有一个指向下一个节点的指针next，最后一个节点的指针next指向null</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/danxianglianbiao.png" alt>  </p>
+<h4 id="2-2-单向循环链表"><a href="#2-2-单向循环链表" class="headerlink" title="2.2 单向循环链表"></a>2.2 单向循环链表</h4><p><strong>单向循环链表是通过最后一个节点（tail）的指针指向第一个节点（head），形成一个闭环</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/danxiangxunhuanlianbiao.png" alt>  </p>
+<h4 id="2-3-双向链表（jdk1-7-1-8中LinkedList底层实现结构）"><a href="#2-3-双向链表（jdk1-7-1-8中LinkedList底层实现结构）" class="headerlink" title="2.3 双向链表（jdk1.7/1.8中LinkedList底层实现结构）"></a>2.3 双向链表（jdk1.7/1.8中LinkedList底层实现结构）</h4><p><strong>双向链表中每个节点都会有两个指针，pre指向前一个节点，next指向下一个节点，第一个节点的pre指向null，最后一个节点的next指向null，达到两个方向互通</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/shuanxianglianbiao.png" alt>  </p>
+<h4 id="2-4-双向循环链表（jdk1-6中LinkedList底层实现结构）"><a href="#2-4-双向循环链表（jdk1-6中LinkedList底层实现结构）" class="headerlink" title="2.4 双向循环链表（jdk1.6中LinkedList底层实现结构）"></a>2.4 双向循环链表（jdk1.6中LinkedList底层实现结构）</h4><p><strong>第一个节点中的pre指向最后一个节点，最后一个节点中的next指向第一个节点，形成一个闭环，且双向互通</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/shuangxiangxunhuanlianbiao.png" alt>  </p>
+<h2 id="3-LinkedList源码分析-双向链表"><a href="#3-LinkedList源码分析-双向链表" class="headerlink" title="3. LinkedList源码分析(双向链表)"></a>3. LinkedList源码分析(双向链表)</h2><h3 id="3-1-继承结构"><a href="#3-1-继承结构" class="headerlink" title="3.1 继承结构"></a>3.1 继承结构</h3><p><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E5%9B%BE%29.png" alt>  </p>
+<p><strong>打开源码我们可以看到LinkedList继承的类与实现的接口</strong><br><img src="https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList.png" alt>  </p>
+<ul>
+<li>继承AbstractSequentialList，该类对AbstractList进一步抽象，在迭代器的基础上实现增删改查，只能按次序访问，无法随机访问  </li>
+<li>实现Deque，Deque是一个双向队列，既可以先进先出，又可先进后出</li>
+<li>实现Cloneable，实现Cloneable接口，就可以使用Object.clone()进行克隆了。</li>
+<li>实现Serializable，实现序列化接口，说明该类能够启用其序列化功能。序列化其实就是持久化，将class转变为字节流传输，然后保存，反序列化就是读取</li>
+</ul>
+<h3 id="3-2-类属性"><a href="#3-2-类属性" class="headerlink" title="3.2 类属性"></a>3.2 类属性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class LinkedList&lt;E&gt;</span><br><span class="line">    extends AbstractSequentialList&lt;E&gt;</span><br><span class="line">    implements List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, java.io.Serializable</span><br><span class="line">&#123;</span><br><span class="line">    //被transient修饰的变量不参与序列化过程</span><br><span class="line">    //节点的个数</span><br><span class="line">    transient int size = 0;</span><br><span class="line">    //表示链表第一个节点</span><br><span class="line">    transient Node&lt;E&gt; first;</span><br><span class="line">    //表示链表最后一个节点</span><br><span class="line">    transient Node&lt;E&gt; last;</span><br><span class="line">    private static final long serialVersionUID = 876323262645176354L;</span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">这里的Node节点是在内部定义的一个类型，下面看看这个内部类有哪些属性以及如何构造的：</span><br><span class="line"></span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28Node%29.png)  </span><br><span class="line">从源码中可以看到，每个节点中都会有三个属性：  </span><br><span class="line">- item 存储该节点的元素element  </span><br><span class="line">- next 存储该节点指向下个节点的指针next  </span><br><span class="line">- prev 存储该节点指向上个节点的指针prev  </span><br><span class="line"></span><br><span class="line">### 3.3 构造方法  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28Constructs%29.png)  </span><br><span class="line">两个构造方法，**LinkedList(Collection&lt;? extends E&gt;)** 允许传入一个集合，查看源码可以看到调用了内部**addAll** 方法，稍后与add方法一同介绍  </span><br><span class="line">### 3.4 增</span><br><span class="line">添加元素操作有以下6种不同实现，下面逐个分析：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28add%29.png)  </span><br><span class="line">#### 3.4.1 add(E)  </span><br><span class="line">add(E)方法默认往linkedList末尾添加新元素  </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public boolean add(E e) {
+    linkLast(e);
+    return true;
+}
+
+/**
+ * Links e as last element.
+ */
+void linkLast(E e) {
+    //链表中最后一个节点 last 
+    final Node&lt;E&gt; l = last;  
+    //new 一个新的节点 newNode，将 prev 指针指向 l ，e 作为新节点元素，next 指向 null
+    final Node&lt;E&gt; newNode = new Node&lt;&gt;(l, e, null);
+    //新添加的 newNode 变为该 LinkedList 的最后一个节点 last
+    last = newNode;
+    if (l == null)
+        first = newNode; // 若 l 节点不存在，则将新节点 newNode 作为第一个节点 first
+    else
+        l.next = newNode; // l 节点存在，将 l 节点的 next 指针指向 新节点 newNode 
+    size++; //最后长度加一
+    modCount++;
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">执行大致过程可以看下图：  </span><br><span class="line"></span><br><span class="line">**演示当前 last 不为 null 的情况在末尾添加元素：**</span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_add%E6%B5%81%E7%A8%8B.gif)  </span><br><span class="line"></span><br><span class="line">#### 3.4.2 add(int, E)  </span><br><span class="line">add(int, E) 方法在指定位置添加新的元素  </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public void add(int index, E element) {
+    checkPositionIndex(index); //对指定元素位置进行合理性检查
+
+    if (index == size)
+        linkLast(element); //index == size 时，调用 linkLast 方法将元素添加到 linkedList 末尾
+    else
+        linkBefore(element, node(index)); //调用 linkBefore 方法
+}
+
+//元素位置越界检查异常处理
+private void checkPositionIndex(int index) {
+    if (!isPositionIndex(index))
+        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+//判断元素位置是否合理
+private boolean isPositionIndex(int index) {
+    return index &gt;= 0 &amp;&amp; index &lt;= size;
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分析 **linkBefore()** 方法之前，先看看 **node(index)** 对节点位置做了怎样的处理。</span><br></pre></td></tr></table></figure>
+
+<pre><code>/**
+ * 返回指定元素索引处的(非空)节点
+ * Returns the (non-null) Node at the specified element index.
+ */
+Node&lt;E&gt; node(int index) {
+
+    if (index &lt; (size &gt;&gt; 1)) {  //size &gt;&gt; 1 相当于 size/2
+        Node&lt;E&gt; x = first;      //从头部第一个节点开始 赋值给 x
+        for (int i = 0; i &lt; index; i++)
+            x = x.next;         // 每次都将下一个节点赋值给 x
+        return x;               // 最后返回的 x 为 index 位置的节点
+    } else {                    
+        Node&lt;E&gt; x = last;
+        for (int i = size - 1; i &gt; index; i--) //这里和上面一样，区别在于从尾部最后一个节点开始遍历
+            x = x.prev;
+        return x;
+    }
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在linkedList中没有下标的概念，但是它又能够在指定的位置插入元素，看完上面的代码，很显然它是通过遍历找到指定位置的元素，这里作者巧妙的利用了二分法，让遍历的效率提高一倍</span><br><span class="line"></span><br><span class="line">再看看 **linkBefore()** 方法的实现：</span><br></pre></td></tr></table></figure>
+
+<pre><code>/**
+ * Inserts element e before non-null Node succ.
+ */
+void linkBefore(E e, Node&lt;E&gt; succ) {
+    final Node&lt;E&gt; pred = succ.prev;
+    final Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, succ);
+    succ.prev = newNode;
+    if (pred == null)
+        first = newNode;
+    else
+        pred.next = newNode;
+    size++;
+    modCount++;
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">这个 linkBefore 方法实现原理与 linkLast 方法类似，将新节点 newNode 的 prev 指针指向指定位置的节点 succ 的前一个节点 pred ，而 succ 的 prev 指针变为指向新节点 newNode， 而新节点 newNode 的 next 指针则指向 succ ，pred 节点的 next 指针指向 newNode ； 这里文字有点绕， 简单点讲: 就是将新节点 newNode 插入 指定节点 succ 的位置，再将它们的指针重整。下面放上一张动图，可以很清晰的看到 linkBefore 方法的大致执行流程：    </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_add%E6%B5%81%E7%A8%8B%EF%BC%88linkBefore%EF%BC%89.gif)  </span><br><span class="line"></span><br><span class="line">#### 3.4.3 addAll(int index, Collection&lt;? extends E&gt; c)  </span><br><span class="line">**addAll(Collection&lt;? extends E&gt; c)** 方法内部调用的是**addAll(int index, Collection&lt;? extends E&gt; c)** 方法，这里只分析后一个  </span><br><span class="line"></span><br><span class="line">**addAll(int index, Collection&lt;? extends E&gt; c)** 方法： 在指定位置插入一个集合，linkList有改动返回true，否则返回false，源码如下：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public boolean addAll(int index, Collection&lt;? extends E&gt; c) {
+    checkPositionIndex(index); //指定位置合理性检查
+
+    Object[] a = c.toArray(); // 将指定集合转换成数组 a
+    int numNew = a.length;    // 保存数组的长度
+    if (numNew == 0)
+        return false;         // 数组没有元素返回false
+
+    Node&lt;E&gt; pred, succ;       // 定义 pred 和 succ 节点，将要在这两个节点中间插入新的节点  
+    if (index == size) {
+        succ = null; // 当指定位置 index 等于链表长度时，该插入位置为链表末端，不存在 succ 节点
+        pred = last; // 则 pred 为最后一个节点 last  
+    } else {
+        succ = node(index); // 将指定位置index的节点赋值给 succ 
+        pred = succ.prev;   // succ 的 prev 指针指向 pred 
+    }
+
+    for (Object o : a) { // for 循环遍历 a 数组
+        @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o;
+        Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, null); // 将新节点 e 的 prev 指针指向 pred 节点，next 指针先指向 null ，得到新节点 newNode 
+        if (pred == null) // 不存在前一个节点 pred 时
+            first = newNode; // 则新节点 newNode 为链表头一个节点 first 
+        else
+            pred.next = newNode; //存在前一个节点 pred 时，pred 的 next 指针指向新节点 newNode
+        pred = newNode; // 最后将新节点赋值为 pred 供下次循环使用，逐个将数组 a 中的元素插入到链表中
+    }
+
+    if (succ == null) { // 遍历完后，如果不存在 succ 节点
+        last = pred;  // 则数组 a 中最后一个元素 pred 就是链表末端最后一个节点 last
+    } else { // 如果存在 succ 节点
+        pred.next = succ; // 则数组 a 中最后一个元素 pred 节点的 next 指针指向 succ 节点
+        succ.prev = pred; // succ 的 prev 指针指向 数组 a 中最后一个元素 pred 节点
+    }
+
+    size += numNew; // 更新链表长度
+    modCount++;
+    return true; // 链表改动，返回 true
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">**小结：** addAll 方法实现步骤：   </span><br><span class="line">1. 传入指定的集合转换为数组；  </span><br><span class="line">2. 遍历该数组逐个插入到链表中 </span><br><span class="line"></span><br><span class="line">#### 3.4.4 addFirst(E) 和 addLast(E)  </span><br><span class="line">- addFirst(E) : 在链表头部插入一个指定元素  </span><br><span class="line">- addLast(E) : 在链表尾部插入一个指定元素  </span><br><span class="line"></span><br><span class="line">addFirst(E) 和 addLast(E)这两个方法分别调用了 linkFirst(E) 和 linkLast(E) ，两个方法实现大同小异，看源码：  </span><br><span class="line"></span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28linkFirsd%20linkLast%29.png)   </span><br><span class="line"></span><br><span class="line">只要读懂前面的分析过程，这里就很容易看懂了，当我们要往链表头部插入一个新的节点时，我们只要将新节点的 prev 指针指向 null ，next 指针指向原链表的第一个节点，如此，指定的新元素就成为链表的第一个节点 first ；在链表尾部插入新元素也是同理，只是指针的方向改为指向 last 节点就可以了  </span><br><span class="line"></span><br><span class="line">### 3.5 删  </span><br><span class="line">LinkedList 删除操作有7个方法实现，逐个分析：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28remove%29.png)  </span><br><span class="line">#### 3.5.1 remove()  </span><br><span class="line">remove() 方法删除链表的第一个元素  </span><br><span class="line">源码分析：</span><br></pre></td></tr></table></figure>
+
+<pre><code>/**
+ * Retrieves and removes the head (first element) of this list.
+ * 检索并删除列表的头部第一个元素
+ * @return the head of this list
+ * @throws NoSuchElementException if this list is empty
+ * @since 1.5
+ */
+public E remove() {
+    return removeFirst();
+}
+
+/**
+ * Removes and returns the first element from this list.
+ * 从列表中移除并返回第一个元素
+ * @return the first element from this list
+ * @throws NoSuchElementException if this list is empty
+ */
+public E removeFirst() {
+    final Node&lt;E&gt; f = first;
+    if (f == null)
+        throw new NoSuchElementException(); //first 节点为 null 时，说明该链表上没有元素，抛出异常
+    return unlinkFirst(f); 
+}
+
+/**
+ * first 节点不为空时，断开 first 节点指针
+ * Unlinks non-null first node f.
+ */
+private E unlinkFirst(Node&lt;E&gt; f) {
+    // assert f == first &amp;&amp; f != null;
+    final E element = f.item; // 将指定删除节点的元素 item 赋值给新定义的 element ，在方法结束时返回 element  
+    final Node&lt;E&gt; next = f.next; // 将 f 节点的 next 指向的节点赋值给新定义的 next 节点
+    f.item = null; // first 节点的 item 设置为 null
+    f.next = null; // first 节点的 next 设置为 null
+    first = next;  // first 节点的下一个节点 next 作为第一个节点 first
+    if (next == null)
+        last = null; // next 节点为 null 时，说明链表只有一个节点 first ，不存在节点 last ，所以 last 要设置为 null 
+    else
+        next.prev = null; // next 在这里作为删除 first 节点后的第一个节点，故 next 的 prev 指针应该指向 null 
+    size--; // 链表长度减一
+    modCount++;
+    return element; // 最后返回指定删除的元素 element
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">remove() 方法实现大致分为三步：  </span><br><span class="line">1. 将第一个节点保存起来，方法结束时返回  </span><br><span class="line">2. 断开第一个节点的所有指针  </span><br><span class="line">3. 将第一个节点的下一个节点 next 设置为第一个节点 first  </span><br><span class="line"></span><br><span class="line">#### 3.5.2 remove(int)  </span><br><span class="line">remove(int) 方法删除指定位置的一个元素  </span><br><span class="line">源码分析：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public E remove(int index) {
+    checkElementIndex(index); //指定位置的合理性检查
+    return unlink(node(index)); // node(index) 上面分析过，返回 index 位置的的节点，接着调用 unlink 方法 
+}
+
+/**
+ * 删除指定不为空的元素
+ * Unlinks non-null node x.
+ */
+E unlink(Node&lt;E&gt; x) {
+    // assert x != null;
+    final E element = x.item; // 将指定位置节点 x 的属性 item 保存为 element ，方法结束时返回 element 
+    final Node&lt;E&gt; next = x.next; // 将 x 节点的 next 指针指向新定义的 next 节点
+    final Node&lt;E&gt; prev = x.prev; // 将 x 节点的 prev 指针指向新定义的 prev 节点
+
+    if (prev == null) {
+        first = next; // 当 prev 指针指向 null 时，说明指定删除的节点位置为链表首节点 first ,将 next 节点设置为 first 节点
+    } else {
+        prev.next = next; // 否则将 next 节点设置为新定义的 prev 节点的 next 节点
+        x.prev = null; // 断开指定删除节点的 prev 指针指向的节点
+    }
+
+    if (next == null) {
+        last = prev; // 当 next 指针指向的节点为 null 时，prev 节点作为最后一个节点 last  
+    } else {
+        next.prev = prev; // 否则将 prev 节点设置为新定义的 next 节点的 prev 节点
+        x.next = null; // 断开指定删除节点的 next 指针指向的节点
+    }
+
+    x.item = null; // 将指定删除的节点的 item 属性设置为 null，让 GC 清理
+    size--; // 链表长度减一
+    modCount++;
+    return element; // 最后返回 element 元素
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">remove(int index) 方法大致分为以下五步：  </span><br><span class="line">1. node(index) 获取到指定位置的节点  </span><br><span class="line">2. 调用 unlink 方法，将指定位置节点传入 </span><br><span class="line">3. 将指定位置节点的 item 属性保存为 element ，方法调用完毕返回该元素</span><br><span class="line">4. 断开指定位置节点的所有指针</span><br><span class="line">5. 将指定位置节点的左右节点连接  </span><br><span class="line"></span><br><span class="line">图解示例步骤如下：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList_remove%E6%B5%81%E7%A8%8B%EF%BC%88unlink%EF%BC%89.gif)</span><br><span class="line"></span><br><span class="line">#### 3.5.3 remove(Object o)  </span><br><span class="line">LinkedList remove(o) 方法支持传入一个Object类型，如果链表中包含指定元素，则删除，返回 true；如果不包含则返回 false  </span><br><span class="line">源码分析：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public boolean remove(Object o) {
+    if (o == null) {
+        for (Node&lt;E&gt; x = first; x != null; x = x.next) { // 传入的参数为 null 时，从 first 节点开始 for 循环遍历整个链表
+            if (x.item == null) { // 当节点的 item 属性为 null 时
+                unlink(x); // 删除该节点（unlink方法上面分析过）
+                return true; // 返回 true
+            }
+        }
+    } else { // 要删除的元素不为 null 的情况
+        for (Node&lt;E&gt; x = first; x != null; x = x.next) {
+            if (o.equals(x.item)) { // equals 方法判断元素是否同一元素
+                unlink(x); // 同一个元素，则删除该元素
+                return true; // 返回 true
+            }
+        }
+    }
+    return false; // 如果指定删除的元素在链表中不存在时，返回false
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这里需要注意的是，在LinkedList 中可以存在 null 值的，而这个 null 值是存储在节点的 item 属性中，节点还有 prev 和 next 指针分别指向前一个元素和后一个元素，prev 和 next 不是空的，所以这也是LinkedList 中可存放 null 值的合理性因素。  </span><br><span class="line"></span><br><span class="line">#### 3.5.4 removeFirst() 和 removeLast()  </span><br><span class="line">这两个方法顾名思义，与 addFirst() 和 addLast() 相对应，既然支持链表首尾添加，就应该支持首尾删除，看看它们的源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public E removeFirst() {
+    final Node&lt;E&gt; f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return unlinkFirst(f);
+}
+
+public E removeLast() {
+    final Node&lt;E&gt; l = last;
+    if (l == null)
+        throw new NoSuchElementException();
+    return unlinkLast(l);
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这里两个方法分别调用 unlinkFirst() 和 unlinkLast() ， unlinkFirst 方法在上面讲 remove() 的时候分析过，unlinkeLast() 就大同小异了。这里不再对这两个方法做分析，可以参考本文 3.5.1   </span><br><span class="line"></span><br><span class="line">#### 3.5.5 removeFirstOccurrence(Object o) 和 removeLastOccurrence(Object o)  </span><br><span class="line">先上源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public boolean removeFirstOccurrence(Object o) {
+    return remove(o);
+}
+
+public boolean removeLastOccurrence(Object o) {
+    if (o == null) {
+        for (Node&lt;E&gt; x = last; x != null; x = x.prev) {
+            if (x.item == null) {
+                unlink(x);
+                return true;
+            }
+        }
+    } else {
+        for (Node&lt;E&gt; x = last; x != null; x = x.prev) {
+            if (o.equals(x.item)) {
+                unlink(x);
+                return true;
+            }
+        }
+    }
+    return false;
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">这两个方法与 remove(Object o) 方法相似，只不过remove(Object o) 默认从链表头部开始遍历删除第一次出现的指定元素，removeFirstOccurrence(Object o) 就是调用了remove(Object o) 方法；而removeLastOccurrence(Object o) 实现了从链表尾部开始遍历删除指定元素，看到源码，我们可以知道它的实现方式与 remove(Object o) 相似，不同的是遍历的方向相反而已。  </span><br><span class="line">#### 3.5.6 小结：  </span><br><span class="line">LinkedList 支持链表首末添加/删除元素操作  </span><br><span class="line">LinkedList 支持指定位置插入/删除元素  </span><br><span class="line">LinkedList 允许删除指定元素  </span><br><span class="line">LinkedList 支持存放 null 值  </span><br><span class="line"></span><br><span class="line">### 3.6 改  </span><br><span class="line">#### 3.6.1 set(int index, E element)   </span><br><span class="line">set(int index, E element) 将链表中指定位置 index 的元素替换成指定元素 element</span><br></pre></td></tr></table></figure>
+
+<pre><code>public E set(int index, E element) {
+    checkElementIndex(index); // 指定位置的合理性检查  
+    Node&lt;E&gt; x = node(index); // 获取指定位置的节点对象
+    E oldVal = x.item; // 将指定位置的节点对象 x 的 item 属性赋值给 oldVal  
+    x.item = element;  // 将指定的元素 element 赋值给 x 节点的 item 属性。
+    return oldVal;     // 将 oldValue 返回
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LinkedList 的数据都是存储在每个节点的 item 属性当中，我们修改数据时，只要修改对应位置节点的 item 属性就行了。</span><br><span class="line"></span><br><span class="line">### 3.7 查 </span><br><span class="line">查操作一共有三个方法：  </span><br><span class="line">![](https://youdaoyun-img.oss-cn-shanghai.aliyuncs.com/LinkedList%28get%29.png)  </span><br><span class="line">#### 3.7.1 get(int)  </span><br><span class="line">get(int) 方法允许获取链表中指定位置的元素。   </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>/**
+ * Returns the element at the specified position in this list.
+ *
+ * @param index index of the element to return
+ * @return the element at the specified position in this list
+ * @throws IndexOutOfBoundsException {@inheritDoc}
+ */
+public E get(int index) {
+    checkElementIndex(index); // 对指定位置 index 做合理性检查
+    return node(index).item;  // 获取到 index 位置对应节点对象的 item 属性值，然后返回
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">get(int) 方法的实现调用了 node(index) 方法，该方法在本文 3.4.2 中分析过。方法内部主要是根据指针 for 循环遍历找到对应位置的节点，显然这种查找方式效率很慢，任何事情都不能做的完美，在这种数据结构下，已经决定了它自身的查找效率是个短板。作者希望能够尽可能的提高它的查询效率，在遍历之前使用了二分法，查找效率提高了一倍。</span><br><span class="line"></span><br><span class="line">#### 3.7.2 getFirst() 和 getLast()</span><br><span class="line">顾名思义，获取链表第一个元素和获取链表最后一个元素。  </span><br><span class="line">源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public E getFirst() {
+    final Node&lt;E&gt; f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return f.item;
+}
+
+public E getLast() {
+    final Node&lt;E&gt; l = last;
+    if (l == null)
+        throw new NoSuchElementException();
+    return l.item;
+}</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这两个方法很容易看懂，就三步，赋值、对节点做异常处理、返回节点的 item 属性。  </span><br><span class="line"></span><br><span class="line">## 4. LinkedList 实现 Deque </span><br><span class="line">Deque 是双端队列，基本操作与 LinkedList 相似，看源码：</span><br></pre></td></tr></table></figure>
+
+<pre><code>public boolean offer(E e) {
+    return add(e);
+}
+
+public boolean offerFirst(E e) {
+    addFirst(e);
+    return true;
+}
+
+public boolean offerLast(E e) {
+    addLast(e);
+    return true;
+}
+
+public E peekFirst() {
+    final Node&lt;E&gt; f = first;
+    return (f == null) ? null : f.item;
+}
+
+public E peekLast() {
+    final Node&lt;E&gt; l = last;
+    return (l == null) ? null : l.item;
+}
+
+public E pollFirst() {
+    final Node&lt;E&gt; f = first;
+    return (f == null) ? null : unlinkFirst(f);
+}
+
+public E pollLast() {
+    final Node&lt;E&gt; l = last;
+    return (l == null) ? null : unlinkLast(l);
+}
+
+public void push(E e) {
+    addFirst(e);
+}
+
+public E pop() {
+    return removeFirst();
+}
+
+public void push(E e) {
+    addFirst(e);
+}
+
+public E pop() {
+    return removeFirst();
+}</code></pre><pre><code>可以看到 Deque 的所有操作都基于 LinkedList 内部方法的实现  
+
+## 5. 总结  
+- LinkedList 在头部或尾部添加元素，复杂度为 O(1) 
+- LinkedList 随机添加元素，涉及到指针的指向操作（参考本文3.4.2 node(index) 方法分析），复杂度为 O(n)  
+- LinkedList 删除元素，在头部尾部删除元素，复杂度为 O(1)
+- LinkedList 指定位置删除元素，需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n)
+- LinkedList 改操作（set方法），需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n) 
+- LinkedList 查操作（get(int)方法），需要先查找到该位置的元素，涉及到指针的指向操作，复杂度为 O(n)  
+- linkedList 所有操作都不是原子操作，线程不安全。
+
+</code></pre></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#JAVA集合" >
+    <span class="tag-code">JAVA集合</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2019/08/24/JAVA 集合整理/">
+        <span class="nav-arrow">← </span>
+        
+          JAVA 集合整理
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2019/08/26/JAVA 集合之ArrayList源码分析/">
+        
+          JAVA 集合之ArrayList源码分析
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Gitment START -->
+      <div id="comments"></div>
+      <!-- Gitment END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#JAVA-集合之LinkedList源码分析"><span class="toc-nav-text">JAVA 集合之LinkedList源码分析</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-概述"><span class="toc-nav-text">1. 概述</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-链表结构"><span class="toc-nav-text">2. 链表结构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-1-单向链表"><span class="toc-nav-text">2.1 单向链表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-2-单向循环链表"><span class="toc-nav-text">2.2 单向循环链表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-3-双向链表（jdk1-7-1-8中LinkedList底层实现结构）"><span class="toc-nav-text">2.3 双向链表（jdk1.7/1.8中LinkedList底层实现结构）</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#2-4-双向循环链表（jdk1-6中LinkedList底层实现结构）"><span class="toc-nav-text">2.4 双向循环链表（jdk1.6中LinkedList底层实现结构）</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-LinkedList源码分析-双向链表"><span class="toc-nav-text">3. LinkedList源码分析(双向链表)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-1-继承结构"><span class="toc-nav-text">3.1 继承结构</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-2-类属性"><span class="toc-nav-text">3.2 类属性</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2019/08/26/JAVA 集合之LinkedList源码分析/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+  <script>
+    var gitmentConfig = "chendingfeng";
+    if (gitmentConfig !== 'undefined') {
+      var gitment = new Gitment({
+        id: "JAVA 集合之LinkedList源码分析",
+        owner: "chendingfeng",
+        repo: "chendingfeng.github.io",
+        oauth: {
+          client_id: "",
+          client_secret: ""
+        },
+        theme: {
+          render(state, instance) {
+            const container = document.createElement('div')
+            container.lang = "en-US"
+            container.className = 'gitment-container gitment-root-container'
+            container.appendChild(instance.renderHeader(state, instance))
+            container.appendChild(instance.renderEditor(state, instance))
+            container.appendChild(instance.renderComments(state, instance))
+            container.appendChild(instance.renderFooter(state, instance))
+            return container;
+          }
+        }
+      })
+      gitment.render(document.getElementById('comments'))
+    }
+  </script>
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2019 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+<script src="/js/script.js"></script>
+  </body>
+</html>
